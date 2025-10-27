@@ -4,13 +4,13 @@ using UnityEngine;
 public class PortalView : MonoBehaviour
 {
     [Header("Portal Setup")]
-    [Tooltip("Camera that will render INTO this portal's material (the other portal's camera).")]
+    [Tooltip("The other portal's camera.")]
     public Camera sourceCamera;
 
     [Tooltip("The other portal's transform (the one linked to this).")]
     public Transform linkedPortal;
 
-    [Tooltip("Reference to the player/main camera that looks through portals.")]
+    [Tooltip("Reference to the player camera that looks through portals.")]
     public Camera playerCamera;
 
     [Header("Render Texture Settings")]
@@ -37,7 +37,6 @@ public class PortalView : MonoBehaviour
 
     void OnValidate()
     {
-        // Keep texture sizes reasonable and positive
         textureWidth = Mathf.Clamp(textureWidth, 128, 4096);
         textureHeight = Mathf.Clamp(textureHeight, 128, 4096);
     }
@@ -47,19 +46,25 @@ public class PortalView : MonoBehaviour
         if (linkedPortal == null || sourceCamera == null || playerCamera == null)
             return;
 
-        // Compute player position relative to this portal
+        //Compute player position relative to this portal
         Vector3 localPos = transform.InverseTransformPoint(playerCamera.transform.position);
-        // Mirror through the portal plane (flip Z)
+        //Mirror through the portal plane (flip Z)
         localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
-        // Move the portal camera to the equivalent position relative to the linked portal
+        //Move the portal camera to the equivalent position relative to the linked portal
         sourceCamera.transform.position = linkedPortal.TransformPoint(localPos);
-
-        // Compute relative rotation
+        //Rotate camera otation
         Quaternion localRot = Quaternion.Inverse(transform.rotation) * playerCamera.transform.rotation;
-        // Flip 180° around Y axis (like walking through the portal)
+        //Flip 180° around Y axis (like walking through the portal)
         localRot = Quaternion.Euler(0f, 180f, 0f) * localRot;
-        // Apply rotation relative to linked portal
+        //Apply rotation relative to linked portal
         sourceCamera.transform.rotation = linkedPortal.rotation * localRot;
+
+        //Distance from camera to the linked portal plane, measured along portal's forward
+        float distance = Vector3.Dot(linkedPortal.forward,
+                                     sourceCamera.transform.position - linkedPortal.position);
+
+        // Push near clip plane forward so it starts just beyond the linked portal surface
+        sourceCamera.nearClipPlane = Mathf.Max(0.01f, distance);
     }
 
     void SetupRenderTexture()
@@ -70,7 +75,7 @@ public class PortalView : MonoBehaviour
             return;
         }
 
-        // create render texture
+        //Create render texture
         rt = new RenderTexture(textureWidth, textureHeight, 24)
         {
             name = textureName + "_" + gameObject.name,
