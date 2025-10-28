@@ -819,7 +819,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -973,6 +973,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1278632727}
+    - targetCorrespondingSourceObject: {fileID: 7725550455073907413, guid: fc5a676d2c90b3d4f8a22e369c35950d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2046817236}
   m_SourcePrefab: {fileID: 100100000, guid: fc5a676d2c90b3d4f8a22e369c35950d, type: 3}
 --- !u!1 &1248971992
 GameObject:
@@ -1283,7 +1287,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -1370,7 +1374,7 @@ GameObject:
   - component: {fileID: 1778113906}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1431,7 +1435,7 @@ Transform:
   m_GameObject: {fileID: 1778113902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -82.3, y: 2.42, z: 115.8}
+  m_LocalPosition: {x: -8.721003, y: 2.6460001, z: 10.770005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1453,6 +1457,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 330585546}
   checkRadius: 0.5
+  currentPortal: {fileID: 0}
+  isCrossing: 0
+  lastPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1913527312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1500,7 +1507,8 @@ GameObject:
   - component: {fileID: 1984472327}
   - component: {fileID: 1984472326}
   - component: {fileID: 1984472330}
-  - component: {fileID: 1984472331}
+  - component: {fileID: 1984472332}
+  - component: {fileID: 1984472333}
   m_Layer: 0
   m_Name: PortalBlue
   m_TagString: PortalSurface
@@ -1592,7 +1600,7 @@ Transform:
   m_GameObject: {fileID: 1984472325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -83.832, y: 1.52, z: 120.849}
+  m_LocalPosition: {x: -10.253, y: 1.746, z: 15.999}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1617,7 +1625,28 @@ MonoBehaviour:
   textureWidth: 1024
   textureHeight: 1024
   textureName: PortalRT
---- !u!114 &1984472331
+--- !u!65 &1984472332
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984472325}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.1}
+  m_Center: {x: 0, y: 0, z: -0.048247203}
+--- !u!114 &1984472333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1626,11 +1655,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1984472325}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e624306c9fc14f408769ab6049f3c9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e45cb8ffa1438949a83efb041e13a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedPortal: {fileID: 2012386926}
-  portalPlane: {fileID: 1984472329}
+  portalTransform: {fileID: 1984472329}
+  linkedPortal: {fileID: 2012386924}
+  portalWallCollider: {fileID: 2046817236}
+  teleportCooldown: 0
+  playerTag: Player
 --- !u!1 &2012386920
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,7 +1676,8 @@ GameObject:
   - component: {fileID: 2012386922}
   - component: {fileID: 2012386921}
   - component: {fileID: 2012386925}
-  - component: {fileID: 2012386926}
+  - component: {fileID: 2012386927}
+  - component: {fileID: 2012386928}
   m_Layer: 0
   m_Name: PortalOrange
   m_TagString: PortalSurface
@@ -1736,7 +1769,7 @@ Transform:
   m_GameObject: {fileID: 2012386920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -87.54, y: 1.52, z: 116.38}
+  m_LocalPosition: {x: -13.999, y: 1.746, z: 11.35}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1761,7 +1794,28 @@ MonoBehaviour:
   textureWidth: 1024
   textureHeight: 1024
   textureName: PortalRT
---- !u!114 &2012386926
+--- !u!65 &2012386927
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012386920}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1, z: 0.1}
+  m_Center: {x: 2.3862247e-16, y: 0, z: -0.030003333}
+--- !u!114 &2012386928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1770,11 +1824,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 2012386920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e624306c9fc14f408769ab6049f3c9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e45cb8ffa1438949a83efb041e13a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linkedPortal: {fileID: 1984472331}
-  portalPlane: {fileID: 2012386924}
+  portalTransform: {fileID: 2012386924}
+  linkedPortal: {fileID: 1984472329}
+  portalWallCollider: {fileID: 2046817236}
+  teleportCooldown: 0.2
+  playerTag: Player
+--- !u!1 &2046817232 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7725550455073907413, guid: fc5a676d2c90b3d4f8a22e369c35950d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1041600070}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2046817236
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046817232}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -744967892933103681, guid: be3ed9816d019ff4a85901f7a3aae376, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
