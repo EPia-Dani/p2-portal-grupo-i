@@ -1,14 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Attach to the PortalTrigger (a thin trigger aligned with the portal opening).
-/// Requires: linkedPortal (the other portal's Transform),
-///           portalWallCollider (the physical non-trigger collider representing the portal wall).
-/// Works with player tagged "Player" that has either:
-///   - Rigidbody + Collider (Capsule recommended), or
-///   - CharacterController
-/// </summary>
 public class PortalTeleporter : MonoBehaviour
 {
     [Header("Portal Links")]
@@ -20,10 +12,6 @@ public class PortalTeleporter : MonoBehaviour
 
     [Tooltip("The non-trigger collider representing the portal's wall � only this collider will be ignored while crossing.")]
     public Collider portalWallCollider;
-
-    [Header("Teleport Settings")]
-    [Tooltip("Minimum time (seconds) to block immediate re-teleport after teleporting.")]
-    public float teleportCooldown = 0.2f;
 
     [Tooltip("Tag for identifying the player GameObject")]
     public string playerTag = "Player";
@@ -184,7 +172,7 @@ public class PortalTeleporter : MonoBehaviour
         {
             // We'll re-enable when the player exits the trigger (OnTriggerExit) which occurs after teleport.
             // But in case player remains overlapping same trigger for a frame, re-enable a short time later as a backup:
-            StartCoroutine(EnsureReenableCollisionLater(playerCol, portalWallCollider, teleportCooldown + 0.05f));
+            StartCoroutine(EnsureReenableCollisionLater(playerCol, portalWallCollider, 0));
         }
     }
 

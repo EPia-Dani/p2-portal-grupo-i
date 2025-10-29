@@ -819,7 +819,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -1287,7 +1287,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -1435,7 +1435,7 @@ Transform:
   m_GameObject: {fileID: 1778113902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.721003, y: 2.6460001, z: 10.770005}
+  m_LocalPosition: {x: -82.122, y: 2.6460001, z: 115.670006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1455,11 +1455,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6856a23ec56c9e428874bfa0652144b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 330585546}
-  checkRadius: 0.5
-  currentPortal: {fileID: 0}
-  isCrossing: 0
-  lastPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1913527312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,7 +1595,7 @@ Transform:
   m_GameObject: {fileID: 1984472325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.253, y: 1.746, z: 15.999}
+  m_LocalPosition: {x: -83.82, y: 1.43, z: 120.999}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1660,8 +1655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalTransform: {fileID: 1984472329}
   linkedPortal: {fileID: 2012386924}
-  portalWallCollider: {fileID: 2046817236}
-  teleportCooldown: 0
+  portalWallCollider: {fileID: 180466597}
   playerTag: Player
 --- !u!1 &2012386920
 GameObject:
@@ -1769,7 +1763,7 @@ Transform:
   m_GameObject: {fileID: 2012386920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -13.999, y: 1.746, z: 11.35}
+  m_LocalPosition: {x: -87.569, y: 1.43, z: 116.321}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1829,8 +1823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portalTransform: {fileID: 2012386924}
   linkedPortal: {fileID: 1984472329}
-  portalWallCollider: {fileID: 2046817236}
-  teleportCooldown: 0.2
+  portalWallCollider: {fileID: 180466597}
   playerTag: Player
 --- !u!1 &2046817232 stripped
 GameObject:
