@@ -1595,7 +1595,7 @@ Transform:
   m_GameObject: {fileID: 1984472325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -83.82, y: 1.43, z: 120.999}
+  m_LocalPosition: {x: -83.82, y: 1.66, z: 120.999}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1617,8 +1617,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 1248971996}
   linkedPortal: {fileID: 2012386924}
   playerCamera: {fileID: 330585545}
-  textureWidth: 1024
-  textureHeight: 1024
+  textureWidth: 1920
+  textureHeight: 1080
   textureName: PortalRT
 --- !u!65 &1984472332
 BoxCollider:
@@ -1763,7 +1763,7 @@ Transform:
   m_GameObject: {fileID: 2012386920}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -87.569, y: 1.43, z: 116.321}
+  m_LocalPosition: {x: -87.569, y: 1.66, z: 116.321}
   m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1785,8 +1785,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 189928558}
   linkedPortal: {fileID: 1984472329}
   playerCamera: {fileID: 330585545}
-  textureWidth: 1024
-  textureHeight: 1024
+  textureWidth: 1920
+  textureHeight: 1080
   textureName: PortalRT
 --- !u!65 &2012386927
 BoxCollider:
