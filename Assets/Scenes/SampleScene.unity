@@ -239,7 +239,6 @@ GameObject:
   m_Component:
   - component: {fileID: 189928555}
   - component: {fileID: 189928558}
-  - component: {fileID: 189928557}
   - component: {fileID: 189928556}
   m_Layer: 0
   m_Name: Camera_PortalBlue
@@ -307,14 +306,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &189928557
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 189928554}
-  m_Enabled: 1
 --- !u!20 &189928558
 Camera:
   m_ObjectHideFlags: 0
@@ -378,6 +369,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -504,6 +496,18 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1bb651c97d1c141af16b3445b308db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,7 +992,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1248971993}
   - component: {fileID: 1248971996}
-  - component: {fileID: 1248971995}
   - component: {fileID: 1248971994}
   m_Layer: 0
   m_Name: Camera_PortalOrange
@@ -1056,14 +1059,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1248971995
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248971992}
-  m_Enabled: 1
 --- !u!20 &1248971996
 Camera:
   m_ObjectHideFlags: 0
@@ -1616,6 +1611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceCamera: {fileID: 1248971996}
   linkedPortal: {fileID: 2012386924}
+  screen: {fileID: 0}
   playerCamera: {fileID: 330585545}
   textureWidth: 1920
   textureHeight: 1080
@@ -1784,6 +1780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sourceCamera: {fileID: 189928558}
   linkedPortal: {fileID: 1984472329}
+  screen: {fileID: 0}
   playerCamera: {fileID: 330585545}
   textureWidth: 1920
   textureHeight: 1080

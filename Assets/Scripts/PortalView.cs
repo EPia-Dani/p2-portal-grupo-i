@@ -9,16 +9,17 @@ public class PortalView : MonoBehaviour
 
     [Tooltip("The other portal's transform (the one linked to this).")]
     public Transform linkedPortal;
+    public MeshRenderer screen;
 
     [Tooltip("Reference to the player camera that looks through portals.")]
     public Camera playerCamera;
 
     [Header("Render Texture Settings")]
-    public int textureWidth = 1024;
-    public int textureHeight = 1024;
+    public int textureWidth = 1920;
+    public int textureHeight = 1080;
     public string textureName = "PortalRT";
 
-    private RenderTexture rt;
+    private RenderTexture renderTexture;
     private Renderer rend;
 
     void Awake()
@@ -67,32 +68,24 @@ public class PortalView : MonoBehaviour
         sourceCamera.nearClipPlane = Mathf.Max(0.01f, distance);
     }
 
-    void SetupRenderTexture()
+
+    ////////////////////////////////////////
+    public void SetupRenderTexture()
     {
-        if (sourceCamera == null)
+        if (renderTexture != null)
         {
-            Debug.LogWarning($"PortalView on '{gameObject.name}' has no sourceCamera assigned.");
-            return;
+            renderTexture.Release();
         }
-
         //Create render texture
-        rt = new RenderTexture(textureWidth, textureHeight, 24)
-        {
-            name = textureName + "_" + gameObject.name,
-            antiAliasing = 1,
-            useMipMap = false,
-            autoGenerateMips = false,
-            filterMode = FilterMode.Bilinear
-        };
-        rt.Create();
-
-        sourceCamera.targetTexture = rt;
+        renderTexture = new RenderTexture(textureWidth, textureHeight, 0);
+        //Render portal's camera to texture
+        sourceCamera.targetTexture = renderTexture;
 
         if (rend.sharedMaterial != null)
         {
             var mpb = new MaterialPropertyBlock();
             rend.GetPropertyBlock(mpb);
-            mpb.SetTexture("_MainTex", rt);
+            mpb.SetTexture("_MainTex", renderTexture);
             rend.SetPropertyBlock(mpb);
         }
         else
@@ -100,18 +93,19 @@ public class PortalView : MonoBehaviour
             Debug.LogWarning($"PortalView: renderer on '{gameObject.name}' has no material assigned.");
         }
     }
+    ////////////////////////////////////////
 
     void CleanupRenderTexture()
     {
-        if (sourceCamera != null && sourceCamera.targetTexture == rt)
+        if (sourceCamera != null && sourceCamera.targetTexture == renderTexture)
         {
             sourceCamera.targetTexture = null;
         }
-        if (rt != null)
+        if (renderTexture != null)
         {
-            rt.Release();
-            Destroy(rt);
-            rt = null;
+            renderTexture.Release();
+            Destroy(renderTexture);
+            renderTexture = null;
         }
     }
 }
