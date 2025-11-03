@@ -32,7 +32,6 @@ public class PlayerDeath : MonoBehaviour
     {
         _playerCamera = Extensions.GetChildRecursive("PlayerCamera", this.transform).GetComponent<Camera>();
         _weaponCamera = Extensions.GetChildRecursive("WeaponCamera", this.transform).GetComponent<Camera>();
-        _deathOverlay = GameManager.GetDeathOverlay();
         
         if (_deathOverlay != null)
             _deathOverlay.color = new Color(1f, 0f, 0f, 0f);
