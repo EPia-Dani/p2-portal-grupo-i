@@ -27,10 +27,6 @@ public class Grabbable : MonoBehaviour
 
     void Start()
     {
-        if (_isGrabbed)
-        {
-            
-        }
     }
 
     void OnEnable()
@@ -81,8 +77,6 @@ public class Grabbable : MonoBehaviour
         
         _dummyObject.position = transform.position;
         _dummyObject.rotation = transform.rotation;
-        
-        Debug.Log("Object Grabbed: " + gameObject.name);
     }
     
     private void OnRelease()
@@ -94,7 +88,5 @@ public class Grabbable : MonoBehaviour
         _rb.angularDamping = _originalAngularDrag;
         _rb.isKinematic = _wasKinematic;
         _rb.useGravity = true;
-        
-        Debug.Log("Object Released: " + gameObject.name);
     }
 }
