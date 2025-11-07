@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "InputSystem_Actions",
+    "name": "InputSystem_Actions_Ferran",
     "maps": [
         {
             "name": "Player",
@@ -28,16 +28,7 @@
                     "name": "Attack",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "5e5d6f3b-f653-4aee-a939-b45292069769",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -48,14 +39,14 @@
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "Press(pressPoint=0.0001)",
                     "initialStateCheck": false
                 },
                 {
                     "name": "Crouch",
                     "type": "Button",
                     "id": "27c5f898-bc57-4ee1-8800-db469aca5fe3",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -73,7 +64,7 @@
                     "name": "Previous",
                     "type": "Button",
                     "id": "2776c80d-3c14-4091-8c56-d04ced07a2b0",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -82,7 +73,7 @@
                     "name": "Next",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -91,7 +82,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -331,17 +322,6 @@
                 },
                 {
                     "name": "",
-                    "id": "d1e8fa06-41ea-4066-a289-9849e1b7a83d",
-                    "path": "<Keyboard>/r",
-                    "interactions": "Press",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cbac6039-9c09-46a1-b5f2-4e5124ccb5ed",
                     "path": "<Keyboard>/2",
                     "interactions": "",
@@ -454,7 +434,7 @@
                     "name": "",
                     "id": "1c04ea5f-b012-41d1-a6f7-02e963b52893",
                     "path": "<Keyboard>/e",
-                    "interactions": "Press(pressPoint=0.1)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Interact",

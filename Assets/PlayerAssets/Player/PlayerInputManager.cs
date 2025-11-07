@@ -75,7 +75,7 @@ public class PlayerInputManager : MonoBehaviour
     
     public void OnInteract(InputAction.CallbackContext context)
     {
-        return;
+        if(!_playerDead) charController.HandleInteraction(context.performed);
     }
     
     private void DisableInputs()

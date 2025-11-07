@@ -29,10 +29,13 @@ public class FPSCharacterController : MonoBehaviour
     private bool _isRunning;
     private bool _isCrouched;
     private bool _isGrounded;
+    private bool _hasGrabbed;
     
     private Vector2 _direction; 
     private Vector3 _movement;
     private Vector2 _jumpDirection;
+
+    public static event Action<GameObject> onGrab;
 
 
     void Start()
@@ -100,8 +103,39 @@ public class FPSCharacterController : MonoBehaviour
             }
         }
     }
-    
-    
+
+    public void HandleInteraction(bool performed)
+    {
+
+        if (performed)
+        {
+            
+            
+        
+            var ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+            Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.yellow);
+            
+            if (_hasGrabbed)
+            {
+                onGrab?.Invoke(null);
+                _hasGrabbed = false;
+            }
+        
+            else if (Physics.Raycast(ray, out hit, interactionDistance))
+            {
+                if(hit.collider.tag.Contains("Interactable"))
+                {
+               
+                }
+                if (hit.collider.tag.Contains("Grabbable"))
+                {
+                    if (!_hasGrabbed) _hasGrabbed = true;
+                    onGrab?.Invoke(hit.collider.gameObject);
+                }
+            }
+        }
+    }
     
     public bool GetGrounded()
     {
@@ -142,7 +176,6 @@ public class FPSCharacterController : MonoBehaviour
         
     }
     
-
     public float GetMovementSpeed()
     {
         return _movementSpeed;
@@ -152,7 +185,6 @@ public class FPSCharacterController : MonoBehaviour
     {
         return _direction;
     }
-    
     
     private void KillMovement()
     {
