@@ -36,11 +36,13 @@ public class PlayerGrabber : MonoBehaviour
     void OnEnable()
     {
         FPSCharacterController.onGrab += GrabObject;
+        TeleportableObject.OnTeleport += OnTeleport;
     }
 
     void OnDisable()
     {
         FPSCharacterController.onGrab -= GrabObject;
+        TeleportableObject.OnTeleport -= OnTeleport;
     }
 
     private void GrabObject(GameObject toGrabObject)
@@ -48,6 +50,16 @@ public class PlayerGrabber : MonoBehaviour
         if(toGrabObject) _currentGrabbedObject = toGrabObject;
         objectGrabbed?.Invoke(_dummyObject.transform, toGrabObject ? toGrabObject : _currentGrabbedObject);
         if(!toGrabObject) _currentGrabbedObject = null;
+    }
+
+    private void OnTeleport(GameObject toTeleport)
+    {
+        if (toTeleport == gameObject || toTeleport == _currentGrabbedObject)
+        {
+            GrabObject(_currentGrabbedObject);
+            _currentGrabbedObject = null;
+        }
+        
     }
     
 }

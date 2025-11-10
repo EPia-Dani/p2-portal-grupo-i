@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class TeleportableObject : MonoBehaviour
 {
+    public static event Action<GameObject> OnTeleport;
+    
     [HideInInspector] public bool IsTeleporting = false;
 
     private Collider col;
@@ -64,6 +67,8 @@ public class TeleportableObject : MonoBehaviour
         }
 
         SetIgnoreWalls(true);
+        
+        OnTeleport?.Invoke(gameObject);
     }
     public void FinishTeleport()
     {
