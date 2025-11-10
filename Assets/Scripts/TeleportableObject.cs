@@ -35,16 +35,16 @@ public class TeleportableObject : MonoBehaviour
         if (IsTeleporting) return;
         IsTeleporting = true;
 
-        // --- Mirror the position relative to the portal plane ---
+        //Mirror the position relative to the portal plane
         Vector3 localPos = fromPortal.InverseTransformPoint(transform.position);
-        localPos = new Vector3(-localPos.x, localPos.y, -localPos.z); // flip across portal plane
+        localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
         Vector3 newPos = toPortal.TransformPoint(localPos);
 
-        // --- Mirror the rotation correctly ---
+        //Mirror the rotation correctly
         Quaternion relativeRot = Quaternion.Inverse(fromPortal.rotation) * transform.rotation;
         Quaternion newRot = toPortal.rotation * Quaternion.Euler(0, 180, 0) * relativeRot;
 
-        // --- Apply position and rotation ---
+        //Apply position and rotation
         if (cc != null)
         {
             cc.enabled = false;
@@ -65,8 +65,6 @@ public class TeleportableObject : MonoBehaviour
 
         SetIgnoreWalls(true);
     }
-    
-
     public void FinishTeleport()
     {
         IsTeleporting = false;

@@ -27,7 +27,7 @@ public class PortalTeleporter : MonoBehaviour
         float side = GetSideOfPortal(t);
         tracked[t] = side;
 
-        // While inside the trigger, disable wall collisions so we can step through
+        //While inside the trigger, disable wall collisions so we can step through
         t.SetIgnoreWalls(true);
     }
 
@@ -47,7 +47,7 @@ public class PortalTeleporter : MonoBehaviour
     {
         if (linkedPortal == null) return;
 
-        // Iterate a copy so we can modify the dict
+        //Iterate a copy to modify the dict
         foreach (var pair in new Dictionary<TeleportableObject, float>(tracked))
         {
             TeleportableObject t = pair.Key;
@@ -60,17 +60,14 @@ public class PortalTeleporter : MonoBehaviour
             float lastSide = pair.Value;
             float currentSide = GetSideOfPortal(t);
 
-            // Visual debug to confirm correct portal orientation
-            Debug.DrawLine(portalSurface.position, portalSurface.position + portalSurface.forward * 0.5f, Color.cyan);
-
-            // Has it crossed from one side of the portal plane to the other?
+            //Check crossing
             if (Mathf.Sign(currentSide) != Mathf.Sign(lastSide))
             {
-                // Center crossed — teleport!
+                //Teleport object
                 t.Teleport(portalSurface, linkedPortal);
                 linkedPortal.GetComponent<PortalTeleporter>()?.NotifyIncoming(t);
 
-                // Update tracking to prevent double triggers
+                //Update tracking to prevent double triggers
                 tracked[t] = currentSide;
             }
             else
@@ -95,6 +92,7 @@ public class PortalTeleporter : MonoBehaviour
 
     private System.Collections.IEnumerator FinishAfterFrame(TeleportableObject obj)
     {
+        //Hay un problema con snapping aquí con la colisión con la pared, lo miro en otro mmomento
         //yield return null;
         yield return new WaitForSeconds(0.5f);
         obj.FinishTeleport();
