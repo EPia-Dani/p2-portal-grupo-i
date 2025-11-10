@@ -69,7 +69,6 @@ public class PortalView : MonoBehaviour
     }
 
 
-    ////////////////////////////////////////
     public void SetupRenderTexture()
     {
         if (renderTexture != null)
@@ -93,7 +92,6 @@ public class PortalView : MonoBehaviour
             Debug.LogWarning($"PortalView: renderer on '{gameObject.name}' has no material assigned.");
         }
     }
-    ////////////////////////////////////////
 
     void CleanupRenderTexture()
     {
