@@ -1074,6 +1074,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1913527313}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!20 &1023529670 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4215349818665907719, guid: ecd2667c5e8a8ee4b960bd65eef77ed0,
+    type: 3}
+  m_PrefabInstance: {fileID: 378174058}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1041600070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1829,7 +1835,7 @@ MonoBehaviour:
   sourceCamera: {fileID: 1248971996}
   linkedPortal: {fileID: 2012386924}
   screen: {fileID: 0}
-  playerCamera: {fileID: 330585545}
+  playerCamera: {fileID: 1023529670}
   textureWidth: 1920
   textureHeight: 1080
   textureName: PortalRT
@@ -1996,7 +2002,7 @@ MonoBehaviour:
   sourceCamera: {fileID: 189928558}
   linkedPortal: {fileID: 1984472329}
   screen: {fileID: 0}
-  playerCamera: {fileID: 330585545}
+  playerCamera: {fileID: 1023529670}
   textureWidth: 1920
   textureHeight: 1080
   textureName: PortalRT
