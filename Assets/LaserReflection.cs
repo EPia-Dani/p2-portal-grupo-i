@@ -3,84 +3,82 @@ using UnityEngine;
 public class LaserReflection : MonoBehaviour
 {
     [SerializeField] private float range = 1500f;
-    
-    private Transform firePoint => Extensions.GetChildRecursive("FirePoint", transform).transform;
+
     private GameObject _currentReflector;
-    
     private LineRenderer _lineRenderer;
-    
-    private Vector3 _castingDirection;
-    
+
     void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
+        
+        if (_lineRenderer != null)
+            _lineRenderer.useWorldSpace = true;
+            
         StopCasting();
-
     }
 
-    public void CastLaser(Vector3 direction)
+    public void CastLaser(Vector3 hitPoint, Vector3 incomingDirection, Vector3 hitNormal)
     {
-    
-        Vector3 surfaceNormal = transform.forward;
-        Vector3 reflectedDirection = Vector3.Reflect(direction, surfaceNormal);
+        if (_lineRenderer == null) return;
         
-        reflectedDirection = Quaternion.AngleAxis(90f, transform.up) * reflectedDirection;
-    
-        _lineRenderer.SetPosition(0, firePoint.localPosition);
-        _castingDirection = reflectedDirection;
+        Vector3 reflectedDirection = Vector3.Reflect(incomingDirection.normalized, hitNormal.normalized);
+        Vector3 origin = hitPoint + reflectedDirection * 0.01f;
         
-        CheckForReflections();
+        _lineRenderer.positionCount = 2;
+        _lineRenderer.SetPosition(0, hitPoint);
         
-        
-    }
-    
-    public void StopCasting()
-    {
-        if (_currentReflector)
+
+        if (Physics.Raycast(origin, reflectedDirection, out RaycastHit hit, range))
         {
-            _currentReflector.GetComponent<LaserReflection>().StopCasting();
-            _currentReflector = null;
-        }
-        _lineRenderer.SetPosition(0, firePoint.localPosition);
-        _lineRenderer.SetPosition(1, Vector3.zero);
-        _castingDirection = Vector3.zero;
-    }
+            _lineRenderer.SetPosition(1, hit.point);
 
-    private void Update()
-    { 
-    }
-
-    private void CheckForReflections()
-    {
-        Ray reflectedRay = new Ray(firePoint.position, _castingDirection);
-
-        if (Physics.Raycast(reflectedRay, out RaycastHit hit, range) && _castingDirection != Vector3.zero)
-        {
             var reflector = hit.collider.GetComponent<LaserReflection>();
 
-            if (reflector && !reflector.IsReflecting())
+            if (reflector)
             {
-                reflector.CastLaser(_castingDirection);
-                _currentReflector = reflector.gameObject;
-            }
-            else if (_currentReflector)
-            {
-                _currentReflector.GetComponent<LaserReflection>().StopCasting();
-                _currentReflector = null;
-            }
+                if (reflector.IsReflecting() && reflector.gameObject != _currentReflector)
+                {
+                    return;
+                }
 
-            _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
+                if(reflector.gameObject != _currentReflector && _currentReflector)
+                {
+                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
+                }
+                
+                _currentReflector = reflector.gameObject;
+                reflector.CastLaser(hit.point, reflectedDirection, hit.normal);
+            }
+            else
+            {
+                if (_currentReflector)
+                {
+                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
+                    _currentReflector = null;
+                }
+            }
         }
         else
         {
-            Vector3 forwardPoint = firePoint.localPosition + transform.InverseTransformDirection(_castingDirection.normalized * range);
-            _lineRenderer.SetPosition(1, forwardPoint);
+            Vector3 endPoint = origin + reflectedDirection * range;
+            _lineRenderer.SetPosition(1, endPoint);
+        }
+    }
+
+    public void StopCasting()
+    {
+        if (_currentReflector != null)
+        {
+            _currentReflector.GetComponent<LaserReflection>()?.StopCasting();
+            _currentReflector = null;
         }
 
+        if (_lineRenderer != null)
+            _lineRenderer.positionCount = 0;
     }
-    
+
     public bool IsReflecting()
     {
-        return _currentReflector == true;
+        return _lineRenderer != null && _lineRenderer.positionCount > 0;
     }
 }
