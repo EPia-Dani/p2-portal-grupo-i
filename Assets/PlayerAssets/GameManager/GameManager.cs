@@ -15,9 +15,21 @@ public class GameManager : MonoBehaviour
     private static Image _deathOverlay;
 
 
-    
-    
-    
+    private void Start()
+    {
+        _player = GetPlayer();
+    }
+
+
+    public static Transform GetPlayer()
+    {
+        if (_player == null)
+        {
+            _player = GameObject.Find("Player").transform;
+            return _player;
+        }
+        else return _player;
+    }
 
 
 

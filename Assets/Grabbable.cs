@@ -1,12 +1,10 @@
-using System;
 using UnityEngine;
 
 public class Grabbable : MonoBehaviour
 {
     
-    [SerializeField] private float moveSpeed = 10f;
+    private float _moveSpeed = 15;
     [SerializeField] private float rotationSpeed = 5f;
-    [SerializeField] private float grabDistance = 10f;
     
     private Rigidbody _rb;
     private Transform _dummyObject;
@@ -24,10 +22,7 @@ public class Grabbable : MonoBehaviour
             Debug.LogError("Grabbable object needs a Rigidbody component!");
         }
     }
-
-    void Start()
-    {
-    }
+    
 
     void OnEnable()
     {
@@ -45,9 +40,11 @@ public class Grabbable : MonoBehaviour
         if (_isGrabbed)
         {
             Vector3 targetPosition = _dummyObject.position;
+            
             Vector3 direction = targetPosition - transform.position;
             
-            _rb.linearVelocity = direction * moveSpeed;
+            
+            _rb.linearVelocity = direction * _moveSpeed;
             
             Quaternion targetRotation = _dummyObject.rotation;
             _rb.MoveRotation(Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed));

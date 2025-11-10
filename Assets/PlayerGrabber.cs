@@ -5,22 +5,32 @@ using UnityEngine;
 
 public class PlayerGrabber : MonoBehaviour
 {
+    
+    [SerializeField] private float minDistanceToGrabbedObject = 4f;
+    
     private Transform _dummyObject;
     private GameObject _currentGrabbedObject;
-    private bool _isGrabbing;
     
     public static event Action<Transform, GameObject> objectGrabbed;
 
     void Awake()
     {
         _dummyObject = Extensions.GetChildRecursive("DummyObject", transform).transform;
-        _isGrabbing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_currentGrabbedObject != null)
+        {
+            Vector3 directionToPlayer = _dummyObject.transform.position - transform.position;
+            float distanceToPlayer = directionToPlayer.magnitude;
+            
+            if (distanceToPlayer < minDistanceToGrabbedObject)
+            {
+                _dummyObject.position = transform.position + directionToPlayer.normalized * minDistanceToGrabbedObject;
+            }
+        }
     }
 
     void OnEnable()
