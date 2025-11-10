@@ -49,7 +49,7 @@ Shader "Tecnocampus/PortalShader"
 		{
 			i.screenPos /= i.screenPos.w;
 			fixed4 l_MaskColor= tex2D(_MaskTex, i.uv);
-			if (l_MaskColor.a < _Cutout)
+			if (l_MaskColor.r < _Cutout)
 				clip(-1);
 			fixed4 col = tex2D(_MainTex, float2(i.screenPos.x, i.screenPos.y));
 			return col;

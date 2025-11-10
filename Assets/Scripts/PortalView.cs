@@ -9,7 +9,6 @@ public class PortalView : MonoBehaviour
 
     [Tooltip("The other portal's transform (the one linked to this).")]
     public Transform linkedPortal;
-    public MeshRenderer screen;
 
     [Tooltip("Reference to the player camera that looks through portals.")]
     public Camera playerCamera;
@@ -18,8 +17,9 @@ public class PortalView : MonoBehaviour
     public int textureWidth = 1920;
     public int textureHeight = 1080;
     public string textureName = "PortalRT";
+    public Texture portal_mask;
 
-    private RenderTexture renderTexture;
+    private RenderTexture renderTarget;
     private Renderer rend;
 
     void Awake()
@@ -71,20 +71,21 @@ public class PortalView : MonoBehaviour
 
     public void SetupRenderTexture()
     {
-        if (renderTexture != null)
+        if (renderTarget != null)
         {
-            renderTexture.Release();
+            renderTarget.Release();
         }
         //Create render texture
-        renderTexture = new RenderTexture(textureWidth, textureHeight, 0);
+        renderTarget = new RenderTexture(textureWidth, textureHeight, 0);
         //Render portal's camera to texture
-        sourceCamera.targetTexture = renderTexture;
+        sourceCamera.targetTexture = renderTarget;
 
         if (rend.sharedMaterial != null)
         {
             var mpb = new MaterialPropertyBlock();
             rend.GetPropertyBlock(mpb);
-            mpb.SetTexture("_MainTex", renderTexture);
+            mpb.SetTexture("_MainTex", renderTarget);
+            mpb.SetTexture("_MaskTex", portal_mask);
             rend.SetPropertyBlock(mpb);
         }
         else
@@ -95,15 +96,15 @@ public class PortalView : MonoBehaviour
 
     void CleanupRenderTexture()
     {
-        if (sourceCamera != null && sourceCamera.targetTexture == renderTexture)
+        if (sourceCamera != null && sourceCamera.targetTexture == renderTarget)
         {
             sourceCamera.targetTexture = null;
         }
-        if (renderTexture != null)
+        if (renderTarget != null)
         {
-            renderTexture.Release();
-            Destroy(renderTexture);
-            renderTexture = null;
+            renderTarget.Release();
+            Destroy(renderTarget);
+            renderTarget = null;
         }
     }
 }
