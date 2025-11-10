@@ -69,7 +69,7 @@ public class FPSCameraController : MonoBehaviour
         _direction = fpsCharacterController.GetMovementDirection();
         
         _fov = CalculateFov(_movementSpeed, fpsCharacterController.horizontalSpeed, fov, MaxFov, fovSpeedBias, _direction);
-        
+        _yaw = transform.eulerAngles.y;
 
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _fov, fovSmoothSpeed);
         weaponCamera.fieldOfView = Mathf.Lerp(weaponCamera.fieldOfView, _fov, fovSmoothSpeed);

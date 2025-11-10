@@ -45,13 +45,13 @@ public class TeleportableObject : MonoBehaviour
         Quaternion newRot = toPortal.rotation * Quaternion.Euler(0, 180, 0) * relativeRot;
 
         //Apply position and rotation
-        if (cc != null)
+       if (cc != null)
         {
             cc.enabled = false;
             transform.SetPositionAndRotation(newPos, newRot);
             cc.enabled = true;
         }
-        else if (rb != null)
+        if (rb != null)
         {
             Vector3 oldVel = rb.linearVelocity;
             rb.position = newPos;
