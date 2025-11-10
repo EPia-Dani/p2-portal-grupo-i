@@ -1,4 +1,4 @@
-using UnityEditor.Rendering;
+
 using UnityEngine;
 
 public class Turret : MonoBehaviour
@@ -25,7 +25,6 @@ public class Turret : MonoBehaviour
     void Update()
     {
         CheckForReflections();
-        
     }
     
     
@@ -33,28 +32,44 @@ public class Turret : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 right = firePoint.TransformDirection(Vector3.right) * range;
+
         if (Physics.Raycast(firePoint.position, right, out hit, range))
         {
-
-            if (!hit.collider.GetComponent<LaserReflection>())
-            {
-                _currentReflector?.GetComponent<LaserReflection>().StopCasting();
-                ResetLaser();
-                _currentReflector = null;
-                return;
-            }
-            
-            _lineRenderer.SetPosition(0, firePoint.localPosition);
-            _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
             var reflector = hit.collider.GetComponent<LaserReflection>();
-            _currentReflector = reflector.gameObject;
-            reflector.CastLaser();
+            
+            if (reflector)
+            {
+                if (reflector.IsReflecting() && reflector.gameObject != _currentReflector)
+                {
+                    _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
+                    return;
+                }
+                
+                if(reflector.gameObject != _currentReflector && _currentReflector)
+                {
+                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
+                    _currentReflector = reflector.gameObject;
+                }
+                else if (reflector.gameObject != _currentReflector)
+                {
+                    _currentReflector = reflector.gameObject;
+                }
+                reflector.CastLaser(hit.point, right.normalized, hit.normal);
+                
+            }
+            else
+            {
+                if (_currentReflector)
+                {
+                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
+                    _currentReflector = null;
+                }
+            }
+            _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
         }
         else
         {
-            _currentReflector?.GetComponent<LaserReflection>().StopCasting();
-            ResetLaser();
-            _currentReflector = null;
+            _lineRenderer.SetPosition(1, transform.InverseTransformPoint(firePoint.position + right*range));
         }
     }
 
