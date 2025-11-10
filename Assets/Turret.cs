@@ -33,14 +33,17 @@ public class Turret : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 right = firePoint.TransformDirection(Vector3.right) * range;
+        
+        
         if (Physics.Raycast(firePoint.position, right, out hit, range))
         {
-
+            
             if (!hit.collider.GetComponent<LaserReflection>())
             {
                 _currentReflector?.GetComponent<LaserReflection>().StopCasting();
                 ResetLaser();
                 _currentReflector = null;
+                _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
                 return;
             }
             
@@ -48,7 +51,7 @@ public class Turret : MonoBehaviour
             _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
             var reflector = hit.collider.GetComponent<LaserReflection>();
             _currentReflector = reflector.gameObject;
-            reflector.CastLaser();
+            reflector.CastLaser(new Ray(firePoint.position, right).direction);
         }
         else
         {
