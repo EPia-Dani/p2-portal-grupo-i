@@ -73,7 +73,6 @@ public class Grabbable : MonoBehaviour
         _rb.useGravity = false;
         
         _dummyObject.position = transform.position;
-        _dummyObject.rotation = transform.rotation;
     }
     
     private void OnRelease()
