@@ -8,7 +8,7 @@ public class LaserReflection : MonoBehaviour
     private GameObject _currentReflector;
     private LineRenderer _lineRenderer;
     
-    private ParticleSystem _particleSystem;
+    private GameObject _particleSystem;
 
     void Awake()
     {
@@ -17,13 +17,14 @@ public class LaserReflection : MonoBehaviour
         if (_lineRenderer != null)
             _lineRenderer.useWorldSpace = true;
             
-        StopCasting();
+        
     }
 
     private void Start()
     {
-        _particleSystem = Extensions.GetChildRecursive("ParticleSystem", transform).gameObject.GetComponent<ParticleSystem>();
-        _particleSystem.Stop();
+        
+        _particleSystem = Extensions.GetChildRecursive("ParticleSystem", transform).gameObject;
+        StopCasting();
     }
 
     public void CastLaser(Vector3 hitPoint, Vector3 incomingDirection, Vector3 hitNormal)
@@ -58,14 +59,14 @@ public class LaserReflection : MonoBehaviour
                 _currentReflector = reflector.gameObject;
                 reflector.CastLaser(hit.point, reflectedDirection, hit.normal);
                 
-                _particleSystem.Stop();
+                _particleSystem.SetActive(false);
                 
             }
             else
             {
                 
-                if (!_particleSystem.isPlaying)
-                    _particleSystem.Play();
+                if (!_particleSystem.activeSelf)
+                    _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
                 
@@ -78,7 +79,7 @@ public class LaserReflection : MonoBehaviour
         }
         else
         {
-            _particleSystem.Stop();
+            _particleSystem.SetActive(true);
             
             Vector3 endPoint = origin + reflectedDirection * range;
             _lineRenderer.SetPosition(1, endPoint);
@@ -95,6 +96,8 @@ public class LaserReflection : MonoBehaviour
 
         if (_lineRenderer != null)
             _lineRenderer.positionCount = 0;
+        
+        _particleSystem.SetActive(false);
     }
 
     public bool IsReflecting()
