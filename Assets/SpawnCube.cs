@@ -46,4 +46,9 @@ public class SpawnCube : MonoBehaviour, ITriggerable
             SpawnPrefab();
         }
     }
+    
+    public bool IsTriggered()
+    {
+        return false;
+    }
 }
