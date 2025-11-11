@@ -79,9 +79,13 @@ public class Grabbable : MonoBehaviour
         _rb.useGravity = false;
         
         _dummyObject.position = transform.position;
-        if(_isTurret)
+        if(!_isTurret)
         {
             _dummyObject.rotation = transform.rotation;
+        }
+        else 
+        {
+            _dummyObject.localRotation = Quaternion.Euler(transform.localEulerAngles.x, 0, 0);
         }
     }
     

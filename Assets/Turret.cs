@@ -6,7 +6,7 @@ public class Turret : MonoBehaviour
     
     private LineRenderer _lineRenderer;
     
-    private ParticleSystem _particleSystem;
+    private GameObject _particleSystem;
     
     [SerializeField] private Transform firePoint;
     [SerializeField] private float range = 1000f;
@@ -21,8 +21,8 @@ public class Turret : MonoBehaviour
 
     void Start()
     {
-        _particleSystem = Extensions.GetChildRecursive("ParticleSystem", transform).gameObject.GetComponent<ParticleSystem>();
-        _particleSystem.Stop();
+        _particleSystem = Extensions.GetChildRecursive("ParticleSystem", transform).gameObject;
+        _particleSystem.SetActive(false);
         ResetLaser();
         
     }
@@ -61,13 +61,13 @@ public class Turret : MonoBehaviour
                 }
                 reflector.CastLaser(hit.point, right.normalized, hit.normal);
                 
-                _particleSystem.Stop();
+                _particleSystem.SetActive(false);
                 
             }
             else
             {
-                if (!_particleSystem.isPlaying)
-                    _particleSystem.Play();
+                if (!_particleSystem.activeSelf)
+                    _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
                 
@@ -82,6 +82,7 @@ public class Turret : MonoBehaviour
         else
         {
             _lineRenderer.SetPosition(1, transform.InverseTransformPoint(firePoint.position + right*range));
+            _particleSystem.SetActive(false);
         }
     }
 
