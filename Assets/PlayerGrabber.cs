@@ -8,6 +8,8 @@ public class PlayerGrabber : MonoBehaviour
     
     [SerializeField] private float minDistanceToGrabbedObject = 4f;
     
+    [SerializeField] private float maxGrabDistance = 6f;
+    
     private Transform _dummyObject;
     private GameObject _currentGrabbedObject;
     

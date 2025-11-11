@@ -7,6 +7,7 @@ public class FPSCharacterController : MonoBehaviour
     public float runningSpeed = 20f;
     public float jumpSpeed = 10f;
     public float interactionDistance = 3f;
+    public float grabDistance = 6f;
     
     public float gravityMultiplier = 2f;
     
@@ -109,9 +110,6 @@ public class FPSCharacterController : MonoBehaviour
 
         if (performed)
         {
-            
-            
-        
             var ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
             Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.yellow);
@@ -130,7 +128,9 @@ public class FPSCharacterController : MonoBehaviour
                 }
                 if (hit.collider.tag.Contains("Grabbable"))
                 {
+                    if (Vector3.Distance(hit.collider.transform.position, transform.position) > grabDistance) return;
                     if (!_hasGrabbed) _hasGrabbed = true;
+                    
                     onGrab?.Invoke(hit.collider.gameObject);
                 }
             }

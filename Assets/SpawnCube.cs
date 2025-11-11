@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SpawnCube : MonoBehaviour
+public class SpawnCube : MonoBehaviour, ITriggerable
 {
     [SerializeField] private GameObject cubePrefab;
     [SerializeField] private int maxPoolSize = 10;
@@ -15,22 +15,12 @@ public class SpawnCube : MonoBehaviour
 
     private void Start()
     {
-        spawnPoint = Extensions.GetChildRecursive("SpawnPoint", transform).transform;
-    }
-
-    private void OnEnable()
-    {
-        PhysicsButton.PhysicsButtonPressed += SpawnPrefab;
+        spawnPoint = Extensions.GetChildRecursive("SpawnPoint", transform).transform;   
     }
     
-    private void OnDisable()
-    {
-        PhysicsButton.PhysicsButtonPressed -= SpawnPrefab;
-    }
     
-    private void SpawnPrefab(GameObject obj)
+    private void SpawnPrefab()
     {
-        if(obj.transform.parent.gameObject != buttonObject) return;
         
         GameObject cube;
         
@@ -47,5 +37,13 @@ public class SpawnCube : MonoBehaviour
         }
 
         _cubePool.Enqueue(cube);
+    }
+
+    public void Trigger( bool activate)
+    {
+        if (activate)
+        {
+            SpawnPrefab();
+        }
     }
 }

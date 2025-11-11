@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PhysicsButton : MonoBehaviour
 {
+    [SerializeField] private GameObject triggerObj;
+    
+    private ITriggerable _trigger;
+    
     private ConfigurableJoint _joint;
     private Rigidbody _rb;
     
     public Vector3 _startPosition = Vector3.zero;
     private bool _isPressed;
-    
-    public static event Action<GameObject> PhysicsButtonPressed;
-    public static event Action<GameObject> PhysicsButtonReleased;
     
     
     private void Awake()
@@ -19,24 +20,27 @@ public class PhysicsButton : MonoBehaviour
         _startPosition.y = transform.position.y;
         _joint = GetComponent<ConfigurableJoint>();
         _rb = GetComponent<Rigidbody>();
-    }   
-    
-    private void FixedUpdate()
+    }
+
+    private void Start()
     {
+        Debug.Log(triggerObj.gameObject.name);
+        
+        if(triggerObj.GetComponent<ITriggerable>() != null) 
+            _trigger = triggerObj.GetComponent<ITriggerable>();
         
     }
     
     public void OnButtonPressed()
     {
-        Debug.Log("Button Pressed");
         _isPressed = true;
-        PhysicsButtonPressed?.Invoke(gameObject);
+        _trigger.Trigger(true);
     }
     public void OnButtonReleased()
     {
-        Debug.Log("Button Released");
+
         _isPressed = false;
-        PhysicsButtonReleased?.Invoke(transform.parent.gameObject);
+        _trigger.Trigger(false);
     }
 
     public bool IsPressed()
