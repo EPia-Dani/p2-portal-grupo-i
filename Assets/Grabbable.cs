@@ -12,6 +12,7 @@ public class Grabbable : MonoBehaviour
     private float _originalDrag;
     private float _originalAngularDrag;
     private bool _wasKinematic;
+    private bool _isTurret;
 
     private void Awake()
     {
@@ -21,6 +22,11 @@ public class Grabbable : MonoBehaviour
         {
             Debug.LogError("Grabbable object needs a Rigidbody component!");
         }
+    }
+
+    private void Start()
+    {
+        _isTurret = GetComponent<Turret>() != null;
     }
     
 
@@ -73,6 +79,10 @@ public class Grabbable : MonoBehaviour
         _rb.useGravity = false;
         
         _dummyObject.position = transform.position;
+        if(_isTurret)
+        {
+            _dummyObject.rotation = transform.rotation;
+        }
     }
     
     private void OnRelease()
