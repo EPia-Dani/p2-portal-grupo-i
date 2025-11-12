@@ -11,7 +11,7 @@ public class Turret : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float range = 1000f;
     
-    private GameObject _currentReflector;
+    private GameObject _currentImpact;
   
     void Awake()
     {
@@ -29,11 +29,11 @@ public class Turret : MonoBehaviour
 
     void Update()
     {
-        CheckForReflections();
+        CheckForImpacts();
     }
     
     
-    private void CheckForReflections()
+    private void CheckForImpacts()
     {
         RaycastHit hit;
         Vector3 right = firePoint.TransformDirection(Vector3.right) * range;
@@ -41,46 +41,55 @@ public class Turret : MonoBehaviour
         if (Physics.Raycast(firePoint.position, right, out hit, range))
         {
             var reflector = hit.collider.GetComponent<LaserReflection>();
+            var receiver = hit.collider.GetComponent<LaserReceiver>();
             
             if (reflector)
             {
-                if (reflector.IsReflecting() && reflector.gameObject != _currentReflector)
+                if (reflector.IsReflecting() && reflector.gameObject != _currentImpact)
                 {
                     _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
                     return;
                 }
                 
-                if(reflector.gameObject != _currentReflector && _currentReflector)
+                if(reflector.gameObject != _currentImpact && _currentImpact)
                 {
-                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
-                    _currentReflector = reflector.gameObject;
+                    _currentImpact.GetComponent<LaserReflection>().StopCasting();
+                    _currentImpact = reflector.gameObject;
                 }
-                else if (reflector.gameObject != _currentReflector)
+                else if (reflector.gameObject != _currentImpact)
                 {
-                    _currentReflector = reflector.gameObject;
+                    _currentImpact = reflector.gameObject;
                 }
                 reflector.CastLaser(hit.point, right.normalized, hit.normal);
                 
                 _particleSystem.SetActive(false);
                 
             }
+            else if (receiver)
+            {
+                Debug.Log("Hit " + hit.collider.name);
+
+                if (receiver.IsTriggered()) return;
+                receiver.Trigger(true);
+                _particleSystem.SetActive(false);
+                _currentImpact = receiver.gameObject;
+                
+            }
             else
             {
+                Debug.Log("Hit " + hit.collider.name);
                 if (!_particleSystem.activeSelf)
                     _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
                 
-                if (_currentReflector)
-                {
-                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
-                    _currentReflector = null;
-                }
+                StopImpact();
             }
             _lineRenderer.SetPosition(1, transform.InverseTransformPoint(hit.point));
         }
         else
         {
+            StopImpact();
             _lineRenderer.SetPosition(1, transform.InverseTransformPoint(firePoint.position + right*range));
             _particleSystem.SetActive(false);
         }
@@ -92,6 +101,26 @@ public class Turret : MonoBehaviour
         Vector3 forwardPoint = firePoint.localPosition;
         forwardPoint.z += range;
         _lineRenderer.SetPosition(1, forwardPoint);
+    }
+    
+    private void StopImpact()
+    {
+        if (_currentImpact)
+        {
+            var currentReceiver = _currentImpact.GetComponent<LaserReceiver>();
+            var currentReflector = _currentImpact.GetComponent<LaserReflection>();
+            if (currentReceiver != null)
+            {
+                Debug.Log("Stopping impact on " + currentReceiver.name);
+                currentReceiver.Trigger(false);
+            }
+            else if (currentReflector != null)
+            {
+                currentReflector.StopCasting();
+            }
+                    
+            _currentImpact = null;
+        }
     }
         
 }

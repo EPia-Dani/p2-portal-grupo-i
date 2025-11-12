@@ -5,7 +5,7 @@ public class LaserReflection : MonoBehaviour
 {
     [SerializeField] private float range = 1500f;
 
-    private GameObject _currentReflector;
+    private GameObject _currentImpact;
     private LineRenderer _lineRenderer;
     
     private GameObject _particleSystem;
@@ -43,23 +43,35 @@ public class LaserReflection : MonoBehaviour
             _lineRenderer.SetPosition(1, hit.point);
 
             var reflector = hit.collider.GetComponent<LaserReflection>();
+            var receiver = hit.collider.GetComponent<LaserReceiver>();
+
 
             if (reflector)
             {
-                if (reflector.IsReflecting() && reflector.gameObject != _currentReflector)
+                if (reflector.IsReflecting() && reflector.gameObject != _currentImpact)
                 {
                     return;
                 }
 
-                if(reflector.gameObject != _currentReflector && _currentReflector)
+                if(reflector.gameObject != _currentImpact && _currentImpact)
                 {
-                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
+                    _currentImpact.GetComponent<LaserReflection>().StopCasting();
                 }
                 
-                _currentReflector = reflector.gameObject;
+                _currentImpact = reflector.gameObject;
                 reflector.CastLaser(hit.point, reflectedDirection, hit.normal);
                 
                 _particleSystem.SetActive(false);
+                
+            }
+            else if (receiver)
+            {
+                Debug.Log("Hit " + hit.collider.name);
+
+                if (receiver.IsTriggered()) return;
+                receiver.Trigger(true);
+                _particleSystem.SetActive(false);
+                _currentImpact = receiver.gameObject;
                 
             }
             else
@@ -70,16 +82,12 @@ public class LaserReflection : MonoBehaviour
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
                 
-                if (_currentReflector)
-                {
-                    _currentReflector.GetComponent<LaserReflection>().StopCasting();
-                    _currentReflector = null;
-                }
+                StopImpact();
             }
         }
         else
         {
-            _particleSystem.SetActive(true);
+            StopImpact();
             
             Vector3 endPoint = origin + reflectedDirection * range;
             _lineRenderer.SetPosition(1, endPoint);
@@ -88,10 +96,10 @@ public class LaserReflection : MonoBehaviour
 
     public void StopCasting()
     {
-        if (_currentReflector != null)
+        if (_currentImpact != null)
         {
-            _currentReflector.GetComponent<LaserReflection>()?.StopCasting();
-            _currentReflector = null;
+            _currentImpact.GetComponent<LaserReflection>()?.StopCasting();
+            _currentImpact = null;
         }
 
         if (_lineRenderer != null)
@@ -103,5 +111,25 @@ public class LaserReflection : MonoBehaviour
     public bool IsReflecting()
     {
         return _lineRenderer != null && _lineRenderer.positionCount > 0;
+    }
+    
+    private void StopImpact()
+    {
+        if (_currentImpact)
+        {
+            var currentReceiver = _currentImpact.GetComponent<LaserReceiver>();
+            var currentReflector = _currentImpact.GetComponent<LaserReflection>();
+            if (currentReceiver != null)
+            {
+                Debug.Log("Stopping impact on " + currentReceiver.name);
+                currentReceiver.Trigger(false);
+            }
+            else if (currentReflector != null)
+            {
+                currentReflector.StopCasting();
+            }
+                    
+            _currentImpact = null;
+        }
     }
 }
