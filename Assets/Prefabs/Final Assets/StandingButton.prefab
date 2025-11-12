@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 991386644282104694}
   - component: {fileID: 2476033702674472546}
   - component: {fileID: 3384034908217287826}
+  - component: {fileID: 174533490841861270}
   m_Layer: 0
   m_Name: Button
   m_TagString: Interactable
@@ -472,8 +473,30 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9043995, y: 3.807029, z: 2.8441741}
-  m_Center: {x: -0.02473258, y: 0.90351033, z: -0.23546134}
+  m_Size: {x: 2.783349, y: 9.023962, z: 3.2848027}
+  m_Center: {x: 0.075587854, y: -0.8591914, z: -0.015147155}
+--- !u!95 &174533490841861270
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5371811685733553771}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6e14c259713324145a310557c02672f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6943698601955871549
 GameObject:
   m_ObjectHideFlags: 0

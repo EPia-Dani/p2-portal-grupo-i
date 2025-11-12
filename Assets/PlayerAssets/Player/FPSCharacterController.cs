@@ -108,7 +108,8 @@ public class FPSCharacterController : MonoBehaviour
 
     public void HandleInteraction(bool performed)
     {
-
+        var excludedLayers = ~LayerMask.GetMask("Player");
+        
         if (performed)
         {
             var ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -120,21 +121,26 @@ public class FPSCharacterController : MonoBehaviour
                 onGrab?.Invoke(null);
                 _hasGrabbed = false;
             }
-        
-            else if (Physics.Raycast(ray, out hit, interactionDistance))
+            
+            else if (Physics.Raycast(ray, out hit, interactionDistance, excludedLayers))
             {
+                Debug.Log("Impacted " + hit.collider.gameObject.layer);
+                
                 if(hit.collider.tag.Contains("Interactable"))
                 {
                     if (hit.distance < interactionDistance)
                     {
-                        Debug.Log("Interacted with " + hit.collider.name);
                         var interactable = hit.collider.GetComponent<IInteractable>();
                         interactable?.Interact();
                     }
                 }
                 if (hit.collider.tag.Contains("Grabbable"))
                 {
-                    if (Vector3.Distance(hit.collider.transform.position, transform.position) > grabDistance) return;
+                    
+                    if (Vector3.Distance(hit.collider.transform.position, transform.position) > grabDistance)
+                    {
+                        return;
+                    }
                     if (!_hasGrabbed) _hasGrabbed = true;
                     
                     onGrab?.Invoke(hit.collider.gameObject);
