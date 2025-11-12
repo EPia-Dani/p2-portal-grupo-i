@@ -46,43 +46,48 @@ public class ShootPortal : MonoBehaviour
         List<Transform> points = new();
         foreach (Transform child in portal)
         {
-            Debug.Log(child.name + "node" +child.transform.localPosition);
+            Debug.Log(child.name + "node" + child.transform.localPosition);
             if (child.name.StartsWith("ValidPoint"))
                 points.Add(child);
         }
 
         Vector3 camPos = playerCamera.transform.position;
 
-        foreach (Transform p in points)
+        foreach (Transform child in points)
         {
-            Vector3 localPos = p.localPosition;
-            Quaternion localRot = p.localRotation;
+            // Obtener la posición local del punto relativo a su padre (portal)
+            Vector3 localPos = child.localPosition;
 
-            Vector3 worldPoint = pos + rot * localPos;
-            Vector3 dir = (worldPoint - camPos);
-            float dist = dir.magnitude;
-            if (dist < 0.0001f)
+            // Aplicar la escala del portal a la posición local antes de transformar
+            Vector3 scaledLocalPos = Vector3.Scale(localPos, portal.localScale);
+
+            // Transformar al espacio mundial usando pos y rot del raycast
+            Vector3 worldPoint = pos + rot * scaledLocalPos;
+
+            Debug.Log($"{child.name} - Local: {localPos}, Scaled: {scaledLocalPos}, World: {worldPoint}");
+
+            // Dirección desde la cámara al punto mundial
+            Vector3 direction = (worldPoint - camPos).normalized;
+
+            if (!Physics.Raycast(camPos, direction, out RaycastHit hit, maxRayDistance))
                 return false;
 
-            dir /= dist;
+            Debug.DrawLine(camPos, hit.point, Color.green, 5f);
 
-            //Ray from camera to point
-            if (!Physics.Raycast(camPos, dir, out RaycastHit hit, Mathf.Min(maxRayDistance, dist + 0.1f)))
+            // Verificar distancia, normal y material si es necesario
+            float distance = Vector3.Distance(hit.point, worldPoint);
+            if (distance > maxPointDistance)
+            {
+                Debug.Log($"{child.name} - Distance check failed: {distance} > {maxPointDistance}");
                 return false;
+            }
 
-            //Check Distance
-            if (Vector3.Distance(hit.point, worldPoint) > maxPointDistance)
+            Material hitMaterial = hit.collider.gameObject.GetComponent<Renderer>()?.sharedMaterial;
+            if (hitMaterial != portalWallMaterial)
+            {
+                Debug.Log($"{child.name} - Material check failed: {hitMaterial?.name ?? "null"} != {portalWallMaterial?.name ?? "null"}");
                 return false;
-
-            //Check Normal angle
-            Vector3 expectedForward = rot * localRot * Vector3.forward;
-            if (Vector3.Angle(hit.normal, expectedForward) > maxNormalAngleDeg)
-                return false;
-
-            //Check wall material
-            Renderer rend = hit.collider.GetComponent<Renderer>();
-            if (rend == null || rend.sharedMaterial != portalWallMaterial)
-                return false;
+            }
         }
 
         return true;
@@ -91,5 +96,7 @@ public class ShootPortal : MonoBehaviour
     private void PlacePortal(Transform portal, Vector3 pos, Quaternion rot)
     {
         portal.SetPositionAndRotation(pos, rot);
+        if(!portal.gameObject.activeSelf)
+            portal.gameObject.SetActive(true);
     }
 }
