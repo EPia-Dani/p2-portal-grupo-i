@@ -36,7 +36,6 @@ public class FollowCanvas : MonoBehaviour
             ShowText();
         else 
             HideText();
-        
     }
 
     private void ShowText()
