@@ -24,11 +24,8 @@ public class PhysicsButton : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(triggerObj.gameObject.name);
-        
         if(triggerObj.GetComponent<ITriggerable>() != null) 
             _trigger = triggerObj.GetComponent<ITriggerable>();
-        
     }
     
     public void OnButtonPressed()

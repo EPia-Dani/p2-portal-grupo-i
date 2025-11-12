@@ -8,6 +8,7 @@ public class DoorController : MonoBehaviour, ITriggerable
     private static readonly int DoorTriggered = Animator.StringToHash("DoorTriggered");
 
     private Animator _animator;
+    private bool _isTriggered = false;
     
     
     private void Awake()
@@ -18,15 +19,13 @@ public class DoorController : MonoBehaviour, ITriggerable
     
     private void OpenDoor()
     {
-
-
+        _isTriggered = true;
         _animator.SetBool(DoorTriggered, true);
     }
     
     private void CloseDoor()
     {
-
-
+        _isTriggered = false;
         _animator.SetBool(DoorTriggered, false);
     }
 
@@ -40,5 +39,10 @@ public class DoorController : MonoBehaviour, ITriggerable
         {
             CloseDoor();
         }
+    }
+
+    public bool IsTriggered()
+    {
+        return _isTriggered;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Interactable;
 using UnityEngine;
 
 public class FPSCharacterController : MonoBehaviour
@@ -124,7 +125,12 @@ public class FPSCharacterController : MonoBehaviour
             {
                 if(hit.collider.tag.Contains("Interactable"))
                 {
-               
+                    if (hit.distance < interactionDistance)
+                    {
+                        Debug.Log("Interacted with " + hit.collider.name);
+                        var interactable = hit.collider.GetComponent<IInteractable>();
+                        interactable?.Interact();
+                    }
                 }
                 if (hit.collider.tag.Contains("Grabbable"))
                 {
