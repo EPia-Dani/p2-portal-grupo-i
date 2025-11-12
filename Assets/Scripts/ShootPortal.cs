@@ -25,14 +25,19 @@ public class ShootPortal : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(-hit.normal, Vector3.up);
 
         //Check placement validity for each portal type
-        bool orangeValid = IsValidPosition(orangePortal, pos, rot);
-        bool blueValid = IsValidPosition(bluePortal, pos, rot);
+        
 
-        if (orangeValid && Input.GetMouseButtonDown(0))
-            PlacePortal(orangePortal, pos, rot);
+        if (Input.GetMouseButtonDown(0))
+        {
+            bool orangeValid = IsValidPosition(orangePortal, pos, rot);
+            if(orangeValid) PlacePortal(orangePortal, pos, rot);
+        }
 
-        if (blueValid && Input.GetMouseButtonDown(1))
-            PlacePortal(bluePortal, pos, rot);
+        if (Input.GetMouseButtonDown(1))
+        {
+            bool blueValid = IsValidPosition(bluePortal, pos, rot);
+            if(blueValid) PlacePortal(bluePortal, pos, rot);
+        }
     }
 
     private bool IsValidPosition(Transform portal, Vector3 pos, Quaternion rot)
@@ -41,6 +46,7 @@ public class ShootPortal : MonoBehaviour
         List<Transform> points = new();
         foreach (Transform child in portal)
         {
+            Debug.Log(child.name + "node" +child.transform.localPosition);
             if (child.name.StartsWith("ValidPoint"))
                 points.Add(child);
         }
