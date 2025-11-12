@@ -215,7 +215,7 @@ LineRenderer:
   - {x: -33, y: 17.9, z: 39.7}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.01
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -347,6 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 0}
   range: 3000
+  damageTick: 20
 --- !u!1 &2409549728925139562
 GameObject:
   m_ObjectHideFlags: 0

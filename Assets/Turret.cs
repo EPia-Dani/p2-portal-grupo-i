@@ -10,8 +10,12 @@ public class Turret : MonoBehaviour
     
     [SerializeField] private Transform firePoint;
     [SerializeField] private float range = 1000f;
+    [SerializeField] private float damageTick = 20f;
     
     private GameObject _currentImpact;
+
+    private float _lastPlayerHitTime = -0.5f;
+    
   
     void Awake()
     {
@@ -42,6 +46,7 @@ public class Turret : MonoBehaviour
         {
             var reflector = hit.collider.GetComponent<LaserReflection>();
             var receiver = hit.collider.GetComponent<LaserReceiver>();
+            var player = hit.collider.GetComponent<PlayerStatusManager>();
             
             if (reflector)
             {
@@ -82,6 +87,15 @@ public class Turret : MonoBehaviour
                     _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
+                
+                if(player)
+                {
+                    if (Time.time - _lastPlayerHitTime >= 1f)
+                    {
+                        player.TakeDamage(damageTick);
+                        _lastPlayerHitTime = Time.time;
+                    }
+                }
                 
                 StopImpact();
             }
