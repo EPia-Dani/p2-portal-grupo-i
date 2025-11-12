@@ -21,6 +21,7 @@ public class PortalTeleporter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!linkedPortal.gameObject.activeSelf) return;
         var t = other.GetComponentInParent<TeleportableObject>();
         if (t == null) return;
 
@@ -33,6 +34,7 @@ public class PortalTeleporter : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (!linkedPortal.gameObject.activeSelf) return;
         var t = other.GetComponentInParent<TeleportableObject>();
         if (t == null) return;
 
@@ -46,6 +48,10 @@ public class PortalTeleporter : MonoBehaviour
     private void Update()
     {
         if (linkedPortal == null) return;
+        if (!linkedPortal.gameObject.activeSelf)
+        {
+            return;
+        }
 
         //Iterate a copy to modify the dict
         foreach (var pair in new Dictionary<TeleportableObject, float>(tracked))

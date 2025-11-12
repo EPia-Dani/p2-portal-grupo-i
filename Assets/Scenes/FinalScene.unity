@@ -2935,6 +2935,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PortalOrange
       objectReference: {fileID: 0}
+    - target: {fileID: 8679158833741364669, guid: ee3b81d300d92494db932ccb5ccd735b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
