@@ -61,22 +61,21 @@ public class FPSCameraController : MonoBehaviour
         
         pitchController = Extensions.GetChildRecursive("PitchController", this.transform).gameObject;
     }
-
-    // Update is called once per frame
-    private void Update()
+    
+    private void LateUpdate() // Cambiar Update por LateUpdate
     {
         _movementSpeed = fpsCharacterController.GetMovementSpeed();
         _direction = fpsCharacterController.GetMovementDirection();
-        
+    
         _fov = CalculateFov(_movementSpeed, fpsCharacterController.horizontalSpeed, fov, MaxFov, fovSpeedBias, _direction);
         _yaw = transform.eulerAngles.y;
 
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _fov, fovSmoothSpeed);
         weaponCamera.fieldOfView = Mathf.Lerp(weaponCamera.fieldOfView, _fov, fovSmoothSpeed);
-        
+    
         _pitch = Mathf.Clamp(_pitch + (_lookDirection.y * sensitivity * Time.deltaTime * (invertYAxis ? 1 : -1)), minPitch, maxPitch);
         _yaw += _lookDirection.x * sensitivity * Time.deltaTime;
-        
+    
         pitchController.transform.localRotation = Quaternion.Euler(_pitch, 0, 0);
         transform.rotation = Quaternion.Euler(0, _yaw, 0);
     }
