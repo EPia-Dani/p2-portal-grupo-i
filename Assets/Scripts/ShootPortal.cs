@@ -177,8 +177,12 @@ public class ShootPortal : MonoBehaviour
                 }
             }
             //Portal has been placed or placement has been cancelled
-            state.holding = false;
-            state.hasValidHit = false;
+            if (state != null)
+            {
+                state.holding = false;
+                state.hasValidHit = false;
+            }
+
             _currentState = null;
         }
     }
