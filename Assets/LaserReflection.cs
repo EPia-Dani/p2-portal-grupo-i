@@ -7,6 +7,8 @@ public class LaserReflection : MonoBehaviour
 
     private GameObject _currentImpact;
     private LineRenderer _lineRenderer;
+    [SerializeField] private float damageTick = 10f;
+    private float _lastPlayerHitTime = -0.5f;
     
     private GameObject _particleSystem;
 
@@ -44,6 +46,7 @@ public class LaserReflection : MonoBehaviour
 
             var reflector = hit.collider.GetComponent<LaserReflection>();
             var receiver = hit.collider.GetComponent<LaserReceiver>();
+            var player = hit.collider.GetComponent<PlayerStatusManager>();
 
 
             if (reflector)
@@ -81,6 +84,16 @@ public class LaserReflection : MonoBehaviour
                     _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
                 _particleSystem.transform.rotation = Quaternion.LookRotation(hit.normal);
+                
+                if(player)
+                {
+                    if (Time.time - _lastPlayerHitTime >= 1f)
+                    {
+                        player.TakeDamage(damageTick);
+                        _lastPlayerHitTime = Time.time;
+                    }
+                }
+                
                 
                 StopImpact();
             }
