@@ -36,6 +36,8 @@ public class LevelManager : MonoBehaviour
 
     private void DisableAllPortals()
     {
+        DisableAllCompanionCubes();
+        
         if(!_orangeActive || !_blueActive)
         {
             _orangeActive = true;
@@ -49,6 +51,19 @@ public class LevelManager : MonoBehaviour
             _blueActive = false;
             orangePortal.SetActive(false);
             bluePortal.SetActive(false);
+        }
+    }
+    
+    private void DisableAllCompanionCubes()
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.scene.IsValid() && obj.name.Contains("CompanionCube"))
+            {
+                obj.SetActive(false);
+            }
         }
     }
 }
