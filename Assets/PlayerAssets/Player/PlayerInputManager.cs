@@ -7,6 +7,7 @@ public class PlayerInputManager : MonoBehaviour
     public FPSCharacterController charController;
     public FPSCameraController camController;
     public WeaponController weaponController;
+    public ShootPortal shootPortal;
 
     private bool _playerDead;
 
@@ -20,6 +21,7 @@ public class PlayerInputManager : MonoBehaviour
         charController = gameObject.GetComponent<FPSCharacterController>();
         camController = gameObject.GetComponent<FPSCameraController>();
         weaponController = gameObject.GetComponent<WeaponController>();
+        shootPortal = gameObject.GetComponent<ShootPortal>();
     }
     
     private void Update()
@@ -63,9 +65,14 @@ public class PlayerInputManager : MonoBehaviour
         if(!_playerDead) charController.Crouch(context.performed);
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnPlacePortalOrange(InputAction.CallbackContext context)
     {
-        if(!_playerDead) weaponController.Fire(context.performed);
+        if(!_playerDead) shootPortal.PortalPlacer(context.performed, ShootPortal.orange);
+    }
+    
+    public void OnPlacePortalBlue(InputAction.CallbackContext  context)  
+    {
+        if(!_playerDead) shootPortal.PortalPlacer(context.performed, ShootPortal.blue);
     }
 
     public void OnReload(InputAction.CallbackContext context)

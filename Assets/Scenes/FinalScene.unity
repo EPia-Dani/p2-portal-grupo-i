@@ -9471,7 +9471,7 @@ PrefabInstance:
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -101.11
+      value: -88.44
       objectReference: {fileID: 0}
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
@@ -9481,7 +9481,7 @@ PrefabInstance:
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 107.68
+      value: 125.56
       objectReference: {fileID: 0}
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
@@ -9538,6 +9538,12 @@ PrefabInstance:
       propertyPath: orangePortal
       value: 
       objectReference: {fileID: 267165369}
+    - target: {fileID: 5267391690968635807, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
+      propertyPath: portalPreviewPrefab
+      value: 
+      objectReference: {fileID: 4526211396281879745, guid: 31bd3044fc85f3b4495d8b099946c02a,
+        type: 3}
     - target: {fileID: 5409364293901377625, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
       propertyPath: m_Layer

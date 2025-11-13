@@ -872,7 +872,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4417647513405836275}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
-        m_MethodName: OnAttack
+        m_MethodName: OnPlacePortalOrange
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
