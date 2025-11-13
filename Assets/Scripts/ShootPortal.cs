@@ -166,7 +166,7 @@ public class ShootPortal : MonoBehaviour
             //Hide preview
             state?.preview.SetActive(false);
             //PLace portal if valid
-            if (state.holding && state.hasValidHit)
+            if (state != null && state.holding && state.hasValidHit)
             {
                 Vector3 pos = state.lastValidHit.point + state.lastValidHit.normal * placementOffset;
                 Quaternion rot = Quaternion.LookRotation(-state.lastValidHit.normal, Vector3.up);

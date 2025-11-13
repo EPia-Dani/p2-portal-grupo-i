@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class TeleportableObject : MonoBehaviour
 {
-    public static event Action<GameObject> OnTeleport;
+    public static event Action<GameObject, Transform, Transform> OnTeleport;
     
     [HideInInspector] public bool IsTeleporting = false;
 
@@ -75,7 +75,7 @@ public class TeleportableObject : MonoBehaviour
         rb.interpolation = prevInterpolation;
 
         SetIgnoreWalls(true);
-        OnTeleport?.Invoke(gameObject);
+        OnTeleport?.Invoke(gameObject, fromPortal, toPortal);
     }
     
     public void FinishTeleport()

@@ -10,7 +10,6 @@ public class FPSCameraController : MonoBehaviour
     public float fovSmoothSpeed = 0.3f;
     public float fovSpeedBias = 0.5f;
     
-    
     //CAMERA CONTROL
     public float sensitivity = 1f;
     public bool invertYAxis;
@@ -33,13 +32,10 @@ public class FPSCameraController : MonoBehaviour
 
     private Vector2 _lookDirection;
     
-   
+    private bool _skipNextUpdate = false; // Nuevo flag
     
-        
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
@@ -47,8 +43,6 @@ public class FPSCameraController : MonoBehaviour
         MaxFov = fov + 20;
         
         fpsCharacterController = GetComponent<FPSCharacterController>();
-        
-        
     }
 
     private void Awake()
@@ -72,13 +66,18 @@ public class FPSCameraController : MonoBehaviour
         TeleportableObject.OnTeleport -= HandleTeleport;
     }
     
-    private void LateUpdate() // Cambiar Update por LateUpdate
+    private void LateUpdate()
     {
+        if (_skipNextUpdate)
+        {
+            _skipNextUpdate = false;
+            return;
+        }
+        
         _movementSpeed = fpsCharacterController.GetMovementSpeed();
         _direction = fpsCharacterController.GetMovementDirection();
     
         _fov = CalculateFov(_movementSpeed, fpsCharacterController.horizontalSpeed, fov, MaxFov, fovSpeedBias, _direction);
-        _yaw = transform.eulerAngles.y;
 
         playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _fov, fovSmoothSpeed);
         weaponCamera.fieldOfView = Mathf.Lerp(weaponCamera.fieldOfView, _fov, fovSmoothSpeed);
@@ -95,36 +94,35 @@ public class FPSCameraController : MonoBehaviour
         _lookDirection = direction;
     }
 
-
     private static float CalculateFov(float _movementSpeed, float horizontalSpeed, float baseFov, float maxFov, float fovSpeedBias, Vector2 _direction)
     {
-
-        // Evitamos divisiones por cero y garantizamos que movementSpeed >= horizontalSpeed
         float speedRatio = Mathf.Max(_movementSpeed / horizontalSpeed, 1f);
-
-        // Función logarítmica normalizada
-        // log(1) = 0 → en horizontalSpeed tenemos baseFov
         float logValue = Mathf.Log(speedRatio);
-
-        // Ajustamos con un factor de escala para que no suba demasiado rápido
         float scale = (maxFov - baseFov) / Mathf.Log((maxFov / horizontalSpeed));
-
-        // Calculamos el FOV con base logarítmica
         float fov = baseFov + (logValue * scale) * _direction.magnitude * fovSpeedBias;
-
-        // Clamp para que no se pase de los límites
         return Mathf.Clamp(fov, MinFov, maxFov);
     }
     
-    private void HandleTeleport(GameObject obj)
+    private void HandleTeleport(GameObject obj, Transform fromPortal, Transform toPortal)
     {
         if (obj == gameObject)
         {
-            // Sincronizar yaw y pitch con la rotación actual del transform
-            _yaw = transform.eulerAngles.y;
-            _pitch = pitchController.transform.localEulerAngles.x;
+            // Obtener la rotación actual de la cámara
+            Quaternion currentRotation = Quaternion.Euler(0, _yaw, 0) * Quaternion.Euler(_pitch, 0, 0);
+
+            // Aplicar la misma transformación que en TeleportableObject
+            Quaternion localRot = Quaternion.Inverse(fromPortal.rotation) * currentRotation;
+            Quaternion mirror = Quaternion.Euler(0, 180, 0);
+            localRot = mirror * localRot;
+            Quaternion newRotation = toPortal.rotation * localRot;
+
+            // Extraer yaw y pitch
+            Vector3 euler = newRotation.eulerAngles;
+            _yaw = euler.y;
+            _pitch = euler.x;
             if (_pitch > 180) _pitch -= 360;
+
+            _skipNextUpdate = true;
         }
     }
-    
 }

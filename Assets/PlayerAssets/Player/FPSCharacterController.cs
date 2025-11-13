@@ -90,8 +90,9 @@ public class FPSCharacterController : MonoBehaviour
         // Usar SphereCast desde el centro del collider hacia abajo
         float distanceToGround = (_capsuleCollider.height / 2f) - _capsuleCollider.radius;
         Vector3 spherePosition = transform.position - new Vector3(0, distanceToGround, 0);
-        
-        _isGrounded = Physics.SphereCast(spherePosition, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer, QueryTriggerInteraction.Ignore);
+
+        // Usar ~0 para incluir todas las capas
+        _isGrounded = Physics.SphereCast(spherePosition, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, ~0, QueryTriggerInteraction.Ignore);
 
         // Debug visual
         Debug.DrawRay(spherePosition, Vector3.down * groundCheckDistance, _isGrounded ? Color.green : Color.red);

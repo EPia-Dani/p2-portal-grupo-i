@@ -54,7 +54,7 @@ public class PlayerGrabber : MonoBehaviour
         if(!toGrabObject) _currentGrabbedObject = null;
     }
 
-    private void OnTeleport(GameObject toTeleport)
+    private void OnTeleport(GameObject toTeleport , Transform fromPortal, Transform toPortal)
     {
         if (toTeleport == gameObject || toTeleport == _currentGrabbedObject)
         {
