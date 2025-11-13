@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -36,6 +37,7 @@ public class TeleportableObject : MonoBehaviour
     public void Teleport(Transform fromPortal, Transform toPortal)
     {
         if (IsTeleporting) return;
+        StartCoroutine(TeleportCooldown());
         IsTeleporting = true;
 
         //Mirror the position relative to the portal plane
@@ -74,5 +76,11 @@ public class TeleportableObject : MonoBehaviour
     {
         IsTeleporting = false;
         SetIgnoreWalls(false);
+    }
+    public IEnumerator TeleportCooldown()
+    {
+        IsTeleporting = true;
+        yield return null; //Wait ONE FRAME
+        IsTeleporting = false;
     }
 }

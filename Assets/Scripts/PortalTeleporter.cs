@@ -1,5 +1,6 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class PortalTeleporter : MonoBehaviour
@@ -53,7 +54,6 @@ public class PortalTeleporter : MonoBehaviour
             return;
         }
 
-        //Iterate a copy to modify the dict
         foreach (var pair in new Dictionary<TeleportableObject, float>(tracked))
         {
             TeleportableObject t = pair.Key;
@@ -71,10 +71,7 @@ public class PortalTeleporter : MonoBehaviour
             {
                 //Teleport object
                 t.Teleport(portalSurface, linkedPortal);
-                linkedPortal.GetComponent<PortalTeleporter>()?.NotifyIncoming(t);
-
-                //Update tracking to prevent double triggers
-                tracked[t] = currentSide;
+                tracked.Remove(t);
             }
             else
             {
@@ -90,19 +87,4 @@ public class PortalTeleporter : MonoBehaviour
         Vector3 offset = center - portalSurface.position;
         return Vector3.Dot(portalSurface.forward, offset);
     }
-
-    public void NotifyIncoming(TeleportableObject obj)
-    {
-        StartCoroutine(FinishAfterFrame(obj));
-    }
-
-    private System.Collections.IEnumerator FinishAfterFrame(TeleportableObject obj)
-    {
-        //Hay un problema con snapping aquí con la colisión con la pared, lo miro en otro mmomento
-        //yield return null;
-        yield return new WaitForSeconds(0.5f);
-        obj.FinishTeleport();
-    }
-
-
 }
