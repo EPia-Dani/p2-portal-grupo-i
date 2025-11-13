@@ -8,95 +8,168 @@ public class ShootPortal : MonoBehaviour
     public Transform orangePortal;
     public Transform bluePortal;
     public Material portalWallMaterial;
+    public GameObject portalPreviewPrefab; //NO COLLIDER
 
     [Header("Settings")]
     public float maxPointDistance = 0.01f;
-    public float maxNormalAngleDeg = 30f;
     public float maxRayDistance = 30f;
     public float placementOffset = 0.01f;
+    public float resizeStep = 0.1f;
+    public float minScale = 1.75f;
+    public float maxScale = 7f;
+    public float defaultScale = 3.5f;
 
-    private void Update()
+    //Private class to hold the state of each portal
+    private class PortalState
     {
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        if (!Physics.Raycast(ray, out RaycastHit hit, maxRayDistance))
-            return;
+        public Transform portal;
+        public GameObject preview;
+        public float scale;
+        public bool holding;
+        public RaycastHit lastValidHit;
+        public bool hasValidHit;
+    }
 
-        Vector3 pos = hit.point + hit.normal * placementOffset;
-        Quaternion rot = Quaternion.LookRotation(-hit.normal, Vector3.up);
+    private PortalState orange;
+    private PortalState blue;
+    private int placementLayerMask;
 
-        //Check placement validity for each portal type
-        
-
-        if (Input.GetMouseButtonDown(0))
+    private PortalState InitPortalState(Transform portal)
+    {
+        var state = new PortalState
         {
-            bool orangeValid = IsValidPosition(orangePortal, pos, rot);
-            if(orangeValid) PlacePortal(orangePortal, pos, rot);
+            portal = portal,
+            preview = Instantiate(portalPreviewPrefab),
+            scale = defaultScale
+        };
+        //Ensure preview does not block raycasts
+        state.preview.layer = 2;
+        state.preview.SetActive(false);
+        return state;
+    }
+
+    void Start()
+    {
+        //Ignore preview layer
+        placementLayerMask = ~(1 << 2);
+        //Initialize portal states
+        orange = InitPortalState(orangePortal);
+        blue = InitPortalState(bluePortal);
+    }
+
+    void Update()
+    {
+        //Handle input for each portal
+        HandlePortal(0, orange);
+        HandlePortal(1, blue);
+    }
+
+    private void HandlePortal(int button, PortalState state)
+    {
+        if (state == null || state.preview == null || state.portal == null) return;
+
+        bool justPressed = Input.GetMouseButtonDown(button);
+        bool pressed = Input.GetMouseButton(button);
+        bool justReleased = Input.GetMouseButtonUp(button);
+
+        //Start placement of the portal
+        if (justPressed)
+        {
+
+            state.scale = defaultScale; //Reset to default size
+            state.holding = true;
         }
 
-        if (Input.GetMouseButtonDown(1))
+        //Handle placement of the portal
+        if (pressed)
         {
-            bool blueValid = IsValidPosition(bluePortal, pos, rot);
-            if(blueValid) PlacePortal(bluePortal, pos, rot);
+            //Resize with scroll wheel
+            float scroll = Input.mouseScrollDelta.y;
+            if (scroll != 0f)
+                state.scale = Mathf.Clamp(state.scale + scroll * resizeStep, minScale, maxScale);
+
+            //Raycast to determine placement
+            Ray ray = playerCamera.ViewportPointToRay(Vector3.one * 0.5f);
+            if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, placementLayerMask))
+            {
+                Vector3 pos = hit.point + hit.normal * placementOffset;
+                Quaternion rot = Quaternion.LookRotation(-hit.normal, Vector3.up);
+
+                //Preview of position and scale
+                state.preview.transform.SetPositionAndRotation(pos, rot);
+                state.preview.transform.localScale = Vector3.one * state.scale;
+
+                //Check if the placement is valid
+                bool valid = IsValidPosition(state.portal, pos, rot, state.scale);
+                if (valid)
+                {
+                    state.lastValidHit = hit;
+                    state.hasValidHit = true;
+                }
+
+                //Change the preview color based on validity
+                var rend = state.preview.GetComponent<Renderer>();
+                if (rend) rend.material.color = valid ? Color.green : Color.red;
+                state.preview.SetActive(true);
+            }
+            else
+            {
+                //If there is no valid hit, hide the preview
+                state.preview.SetActive(false);
+            }
+                
+        }
+
+        //Finalize placement of the portal
+        if (justReleased)
+        {
+            //Hide preview
+            state.preview.SetActive(false);
+            //PLace portal if valid
+            if (state.holding && state.hasValidHit)
+            {
+                Vector3 pos = state.lastValidHit.point + state.lastValidHit.normal * placementOffset;
+                Quaternion rot = Quaternion.LookRotation(-state.lastValidHit.normal, Vector3.up);
+                if (IsValidPosition(state.portal, pos, rot, state.scale))
+                {
+                    state.portal.localScale = Vector3.one * state.scale;
+                    PlacePortal(state.portal, pos, rot);
+                }
+            }
+            //Portal has been placed or placement has been cancelled
+            state.holding = false;
+            state.hasValidHit = false;
         }
     }
 
-    private bool IsValidPosition(Transform portal, Vector3 pos, Quaternion rot)
+    //Check if ValidPoints are all on a wall
+    private bool IsValidPosition(Transform portal, Vector3 pos, Quaternion rot, float scale)
     {
-        //Get ValidPoints
-        List<Transform> points = new();
         foreach (Transform child in portal)
         {
-            Debug.Log(child.name + "node" + child.transform.localPosition);
-            if (child.name.StartsWith("ValidPoint"))
-                points.Add(child);
+            if (!child.name.StartsWith("ValidPoint")) continue;
+
+            //Convert local position to world and scale
+            Vector3 worldPoint = pos + rot * (child.localPosition * scale);
+            Vector3 dir = (worldPoint - playerCamera.transform.position).normalized;
+
+            //Raycast from camera to worldPoint (valid point)
+            if (!Physics.Raycast(playerCamera.transform.position, dir, out RaycastHit hit, maxRayDistance, placementLayerMask))
+                return false;
+
+            //Check correct distance
+            if (Vector3.Distance(hit.point, worldPoint) > maxPointDistance) return false;
+
+            //Check correct material
+            if (hit.collider.GetComponent<Renderer>()?.sharedMaterial != portalWallMaterial) return false;
         }
-
-        Vector3 camPos = playerCamera.transform.position;
-
-        foreach (Transform child in points)
-        {
-            // Obtener la posición local del punto relativo a su padre (portal)
-            Vector3 localPos = child.localPosition;
-
-            // Aplicar la escala del portal a la posición local antes de transformar
-            Vector3 scaledLocalPos = Vector3.Scale(localPos, portal.localScale);
-
-            // Transformar al espacio mundial usando pos y rot del raycast
-            Vector3 worldPoint = pos + rot * scaledLocalPos;
-
-            Debug.Log($"{child.name} - Local: {localPos}, Scaled: {scaledLocalPos}, World: {worldPoint}");
-
-            // Dirección desde la cámara al punto mundial
-            Vector3 direction = (worldPoint - camPos).normalized;
-
-            if (!Physics.Raycast(camPos, direction, out RaycastHit hit, maxRayDistance))
-                return false;
-
-            Debug.DrawLine(camPos, hit.point, Color.green, 5f);
-
-            // Verificar distancia, normal y material si es necesario
-            float distance = Vector3.Distance(hit.point, worldPoint);
-            if (distance > maxPointDistance)
-            {
-                Debug.Log($"{child.name} - Distance check failed: {distance} > {maxPointDistance}");
-                return false;
-            }
-
-            Material hitMaterial = hit.collider.gameObject.GetComponent<Renderer>()?.sharedMaterial;
-            if (hitMaterial != portalWallMaterial)
-            {
-                Debug.Log($"{child.name} - Material check failed: {hitMaterial?.name ?? "null"} != {portalWallMaterial?.name ?? "null"}");
-                return false;
-            }
-        }
-
-        return true;
+        return true; //All points are valid
     }
 
+    //Place the portal
     private void PlacePortal(Transform portal, Vector3 pos, Quaternion rot)
     {
         portal.SetPositionAndRotation(pos, rot);
-        if(!portal.gameObject.activeSelf)
-            portal.gameObject.SetActive(true);
+        if (!portal.gameObject.activeSelf) portal.gameObject.SetActive(true);
     }
 }
