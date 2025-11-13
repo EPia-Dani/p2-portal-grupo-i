@@ -36,46 +36,48 @@ public class TeleportableObject : MonoBehaviour
 
     public void Teleport(Transform fromPortal, Transform toPortal)
     {
-        if (IsTeleporting) return;
+        if (IsTeleporting || rb == null) return;
         StartCoroutine(TeleportCooldown());
         IsTeleporting = true;
 
-        //Mirror the position relative to the portal plane
+        // Transformar posición
         Vector3 localPos = fromPortal.InverseTransformPoint(transform.position);
         localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
         Vector3 newPos = toPortal.TransformPoint(localPos);
 
-        //Mirror the rotation correctly
-        Quaternion relativeRot = Quaternion.Inverse(fromPortal.rotation) * transform.rotation;
-        Quaternion newRot = toPortal.rotation * Quaternion.Euler(0, 180, 0) * relativeRot;
+        // Transformar velocidad completa al espacio local del portal de entrada
+        Vector3 localVel = fromPortal.InverseTransformDirection(rb.linearVelocity);
 
-        //Apply position and rotation
-        if (cc != null)
-        {
-            cc.enabled = false;
-            transform.SetPositionAndRotation(newPos, newRot);
-            cc.enabled = true;
-        }
-        else if (rb != null)
-        {
-            // Para Rigidbody, transformar la velocidad correctamente
-            Vector3 localVel = fromPortal.InverseTransformDirection(rb.linearVelocity);
-            localVel = new Vector3(-localVel.x, localVel.y, -localVel.z);
-            Vector3 newVel = toPortal.TransformDirection(localVel);
+        // Aplicar transformación espejo (invertir X y Z)
+        localVel = new Vector3(-localVel.x, localVel.y, -localVel.z);
 
-            rb.position = newPos;
-            rb.rotation = newRot;
-            rb.linearVelocity = newVel;
-        }
-        else
-        {
-            transform.SetPositionAndRotation(newPos, newRot);
-        }
+        // Convertir al espacio mundial del portal de salida
+        Vector3 newVel = toPortal.TransformDirection(localVel);
+
+        // Transformar rotación
+        Quaternion localRot = Quaternion.Inverse(fromPortal.rotation) * transform.rotation;
+        Quaternion mirror = Quaternion.Euler(0, 180, 0);
+        localRot = mirror * localRot;
+        Quaternion newRot = toPortal.rotation * localRot;
+
+        // Desactivar temporalmente interpolación para evitar conflictos
+        RigidbodyInterpolation prevInterpolation = rb.interpolation;
+        rb.interpolation = RigidbodyInterpolation.None;
+
+        // Aplicar transformaciones al Rigidbody
+        rb.position = newPos;
+        rb.rotation = newRot;
+        rb.linearVelocity = newVel;
+
+        Physics.SyncTransforms();
+
+        // Restaurar interpolación
+        rb.interpolation = prevInterpolation;
 
         SetIgnoreWalls(true);
-        
         OnTeleport?.Invoke(gameObject);
     }
+    
     public void FinishTeleport()
     {
         IsTeleporting = false;

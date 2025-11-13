@@ -164,7 +164,7 @@ public class ShootPortal : MonoBehaviour
         if (!_pressed)
         {
             //Hide preview
-            state.preview.SetActive(false);
+            state?.preview.SetActive(false);
             //PLace portal if valid
             if (state.holding && state.hasValidHit)
             {

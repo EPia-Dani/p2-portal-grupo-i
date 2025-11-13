@@ -62,6 +62,16 @@ public class FPSCameraController : MonoBehaviour
         pitchController = Extensions.GetChildRecursive("PitchController", this.transform).gameObject;
     }
     
+    private void OnEnable()
+    {
+        TeleportableObject.OnTeleport += HandleTeleport;
+    }
+
+    private void OnDisable()
+    {
+        TeleportableObject.OnTeleport -= HandleTeleport;
+    }
+    
     private void LateUpdate() // Cambiar Update por LateUpdate
     {
         _movementSpeed = fpsCharacterController.GetMovementSpeed();
@@ -104,9 +114,17 @@ public class FPSCameraController : MonoBehaviour
 
         // Clamp para que no se pase de los límites
         return Mathf.Clamp(fov, MinFov, maxFov);
-
-
     }
     
+    private void HandleTeleport(GameObject obj)
+    {
+        if (obj == gameObject)
+        {
+            // Sincronizar yaw y pitch con la rotación actual del transform
+            _yaw = transform.eulerAngles.y;
+            _pitch = pitchController.transform.localEulerAngles.x;
+            if (_pitch > 180) _pitch -= 360;
+        }
+    }
     
 }
