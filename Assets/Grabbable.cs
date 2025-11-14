@@ -45,6 +45,11 @@ public class Grabbable : MonoBehaviour
     {
         if (_isGrabbed)
         {
+            if (_isTurret && Input.GetKeyDown(KeyCode.R))
+            {
+                GetComponent<Turret>().Revive();
+            }
+            
             Vector3 targetPosition = _dummyObject.position;
             
             Vector3 direction = targetPosition - transform.position;

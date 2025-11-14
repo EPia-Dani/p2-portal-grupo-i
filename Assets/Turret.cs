@@ -128,6 +128,8 @@ public class Turret : MonoBehaviour
 
     private void ResetLaser()
     {
+        _lineRenderer.positionCount = 2;
+        
         _lineRenderer.SetPosition(0, firePoint.localPosition);
         Vector3 forwardPoint = firePoint.localPosition;
         forwardPoint.z += range;
@@ -175,6 +177,15 @@ public class Turret : MonoBehaviour
             _lineRenderer.positionCount = 0;
         
         _particleSystem.SetActive(false);
+    }
+    
+    public void Revive()
+    {
+        if (_isDead)
+        {
+            _isDead = false;
+            ResetLaser();
+        }
     }
         
 }
