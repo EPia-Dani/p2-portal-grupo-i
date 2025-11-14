@@ -60,7 +60,10 @@ public class Turret : MonoBehaviour
         RaycastHit hit;
         Vector3 right = firePoint.TransformDirection(Vector3.right) * range;
 
-        if (Physics.Raycast(firePoint.position, right, out hit, range))
+        int glassLayer = LayerMask.NameToLayer("Glass");
+        int layerMask = ~(1 << glassLayer);
+        
+        if (Physics.Raycast(firePoint.position, right, out hit, range, layerMask))
         {
             var reflector = hit.collider.GetComponent<LaserReflection>();
             var receiver = hit.collider.GetComponent<LaserReceiver>();

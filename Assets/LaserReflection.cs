@@ -40,7 +40,10 @@ public class LaserReflection : MonoBehaviour
         _lineRenderer.SetPosition(0, hitPoint);
         
 
-        if (Physics.Raycast(origin, reflectedDirection, out RaycastHit hit, range))
+        int glassLayer = LayerMask.NameToLayer("Glass");
+        int layerMask = ~(1 << glassLayer);
+        
+        if (Physics.Raycast(origin, reflectedDirection, out RaycastHit hit, range, layerMask))
         {
             _lineRenderer.SetPosition(1, hit.point);
 
