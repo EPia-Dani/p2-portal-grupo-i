@@ -98,8 +98,12 @@ public class ShootPortal : MonoBehaviour
     {
         portal.SetPositionAndRotation(pos, rot);
         if (!portal.gameObject.activeSelf) portal.gameObject.SetActive(true);
+
+        //Animate portal opening
+        StartCoroutine(AnimatePortalOpen(portal, portal.localScale));
+
     }
-    
+
     public void PortalPlacer(bool performed, PortalState state)
     {
         if(performed)
@@ -190,4 +194,24 @@ public class ShootPortal : MonoBehaviour
             _currentState = null;
         }
     }
+
+    private System.Collections.IEnumerator AnimatePortalOpen(Transform portal, Vector3 targetScale)
+    {
+        float duration = 0.25f; //Animation duration
+        portal.localScale = Vector3.zero;
+
+        float time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            t = Mathf.SmoothStep(0f, 1f, t);
+            portal.localScale = targetScale * t;
+            yield return null;
+        }
+
+        portal.localScale = targetScale; //Ensure correct final scale
+    }
+
 }
+
