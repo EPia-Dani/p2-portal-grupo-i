@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 587153756666084138}
   - component: {fileID: 9126017048569441871}
   - component: {fileID: 5568712025274073085}
+  - component: {fileID: 5044771596408784903}
   m_Layer: 0
   m_Name: LaserTurret
   m_TagString: Grabbable
@@ -331,8 +332,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 124.61412, y: 193.00404, z: 174.82751}
-  m_Center: {x: -27.510366, y: -13.639569, z: -17.658852}
+  m_Size: {x: 210, y: 245.63457, z: 210.18356}
+  m_Center: {x: -34.54, y: 0, z: 0}
 --- !u!114 &5568712025274073085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +349,19 @@ MonoBehaviour:
   firePoint: {fileID: 0}
   range: 3000
   damageTick: 20
+  deathSound: {fileID: 8300000, guid: 78509822d837d4c4aae9b3e15e858535, type: 3}
+--- !u!114 &5044771596408784903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041293191180976333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3643927b070647f429ef0e4b39ab66d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2409549728925139562
 GameObject:
   m_ObjectHideFlags: 0

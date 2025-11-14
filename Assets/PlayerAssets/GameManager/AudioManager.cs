@@ -18,7 +18,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySfx(AudioClip clip, float volume = 1f)
     {
-        
+        Debug.Log("Playing SFX: " + clip.name);
         if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
         _currentCoroutine = StartCoroutine(PlaySfxCoroutine(clip, volume));
     }

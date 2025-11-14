@@ -99,4 +99,9 @@ public class Grabbable : MonoBehaviour
         _rb.isKinematic = _wasKinematic;
         _rb.useGravity = true;
     }
+    
+    public bool IsGrabbed()
+    {
+        return _isGrabbed;
+    }
 }

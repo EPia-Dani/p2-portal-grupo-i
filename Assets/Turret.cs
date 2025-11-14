@@ -4,39 +4,57 @@ using UnityEngine;
 public class Turret : MonoBehaviour
 {
     
-    private LineRenderer _lineRenderer;
-    
-    private GameObject _particleSystem;
-    
     [SerializeField] private Transform firePoint;
     [SerializeField] private float range = 1000f;
     [SerializeField] private float damageTick = 20f;
+    [SerializeField] private AudioClip deathSound;
+    
+    
+    private LineRenderer _lineRenderer;
+    private Grabbable _grabbable;
+    private AudioManager _audioManager;
     
     private GameObject _currentImpact;
+    private GameObject _particleSystem;
 
     private float _lastPlayerHitTime = -0.5f;
+    private bool _isDead = false;
     
   
     void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
-        firePoint = Extensions.GetChildRecursive("FirePoint", transform).transform;
+        _grabbable = GetComponent<Grabbable>();
+        _audioManager = GetComponent<AudioManager>();
     }
 
     void Start()
     {
+        firePoint = Extensions.GetChildRecursive("FirePoint", transform).transform;
         _particleSystem = Extensions.GetChildRecursive("ParticleSystem", transform).gameObject;
         _particleSystem.SetActive(false);
         ResetLaser();
         
     }
+    
 
     void Update()
     {
-        CheckForImpacts();
+        var wasDead = _isDead;
+        if(!_isDead) _isDead = CheckIsDead();
+        
+        if(!_isDead) CheckForImpacts();
+        
+        else
+        {
+            if(!wasDead) _audioManager.PlaySfx(deathSound, 1f);
+            StopImpact();
+            StopCasting();
+        }
     }
     
     
+    // ReSharper disable Unity.PerformanceAnalysis
     private void CheckForImpacts()
     {
         RaycastHit hit;
@@ -61,7 +79,7 @@ public class Turret : MonoBehaviour
                     _currentImpact.GetComponent<LaserReflection>().StopCasting();
                     _currentImpact = reflector.gameObject;
                 }
-                else if (reflector.gameObject != _currentImpact)
+                else if (reflector.gameObject && reflector.gameObject != _currentImpact)
                 {
                     _currentImpact = reflector.gameObject;
                 }
@@ -82,7 +100,6 @@ public class Turret : MonoBehaviour
             }
             else
             {
-                Debug.Log("Hit " + hit.collider.name);
                 if (!_particleSystem.activeSelf)
                     _particleSystem.SetActive(true);
                 _particleSystem.transform.position = hit.point;
@@ -135,6 +152,29 @@ public class Turret : MonoBehaviour
                     
             _currentImpact = null;
         }
+    }
+    
+    private bool CheckIsDead()
+    {
+        if (!_grabbable.IsGrabbed())
+        {
+            return Vector3.Dot(transform.up, Vector3.up) < 0.7f;
+        }
+        return false;
+    }
+
+    private void StopCasting()
+    {
+        if (_currentImpact != null)
+        {
+            _currentImpact.GetComponent<LaserReflection>()?.StopCasting();
+            _currentImpact = null;
+        }
+
+        if (_lineRenderer != null)
+            _lineRenderer.positionCount = 0;
+        
+        _particleSystem.SetActive(false);
     }
         
 }
