@@ -55275,6 +55275,11 @@ PrefabInstance:
       objectReference: {fileID: 871521802}
     - target: {fileID: 8228264889469249427, guid: cb7c5531994161142a8b4b0249d7c21e,
         type: 3}
+      propertyPath: allowResize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228264889469249427, guid: cb7c5531994161142a8b4b0249d7c21e,
+        type: 3}
       propertyPath: canBeCloned
       value: 0
       objectReference: {fileID: 0}
