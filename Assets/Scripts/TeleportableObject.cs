@@ -39,33 +39,31 @@ public class TeleportableObject : MonoBehaviour
             col.excludeLayers = mask;
         }
     }
-
+    
     public void Teleport(Transform fromPortal, Transform toPortal)
     {
-        if (IsTeleporting || rb == null) return;
-        StartCoroutine(TeleportCooldown());
-        IsTeleporting = true;
-
-        // Transformar posición
+        // Calcular posición relativa al portal de origen
         Vector3 localPos = fromPortal.InverseTransformPoint(transform.position);
+        // Reflejar a través del plano del portal
         localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
-        Vector3 newPos = toPortal.TransformPoint(localPos);
+        // Aplicar al portal de destino CON OFFSET
+        transform.position = toPortal.TransformPoint(localPos) + toPortal.forward * 0.03f;
 
-        // Transformar velocidad completa al espacio local del portal de entrada
-        Vector3 localVel = fromPortal.InverseTransformDirection(rb.linearVelocity);
-
-        // Aplicar transformación espejo (invertir X y Z)
-        localVel = new Vector3(-localVel.x, localVel.y, -localVel.z);
-
-        // Convertir al espacio mundial del portal de salida
-        Vector3 newVel = toPortal.TransformDirection(localVel);
-
-        // Transformar rotación
+        // Calcular rotación
         Quaternion localRot = Quaternion.Inverse(fromPortal.rotation) * transform.rotation;
         Quaternion mirror = Quaternion.Euler(0, 180, 0);
         localRot = mirror * localRot;
-        Quaternion newRot = toPortal.rotation * localRot;
+        transform.rotation = toPortal.rotation * localRot;
 
+        // Ajustar velocidad si tiene Rigidbody
+        var rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 localVel = fromPortal.InverseTransformDirection(rb.linearVelocity);
+            localVel = new Vector3(-localVel.x, localVel.y, -localVel.z);
+            rb.linearVelocity = toPortal.TransformDirection(localVel);
+        }
+        
         if (allowResize)
         {
             //Scale ratio between portals
@@ -73,28 +71,12 @@ public class TeleportableObject : MonoBehaviour
                 toPortal.lossyScale.x / fromPortal.lossyScale.x,
                 toPortal.lossyScale.y / fromPortal.lossyScale.y,
                 toPortal.lossyScale.z / fromPortal.lossyScale.z
-                );
+            );
 
             // Apply cumulative scale to the object
             transform.localScale = Vector3.Scale(transform.localScale, scaleRatio);
         }
 
-
-        // Desactivar temporalmente interpolación para evitar conflictos
-        RigidbodyInterpolation prevInterpolation = rb.interpolation;
-        rb.interpolation = RigidbodyInterpolation.None;
-
-        // Aplicar transformaciones al Rigidbody
-        rb.position = newPos;
-        rb.rotation = newRot;
-        rb.linearVelocity = newVel;
-
-        Physics.SyncTransforms();
-
-        // Restaurar interpolación
-        rb.interpolation = prevInterpolation;
-
-        SetIgnoreWalls(true);
         OnTeleport?.Invoke(gameObject, fromPortal, toPortal);
     }
     

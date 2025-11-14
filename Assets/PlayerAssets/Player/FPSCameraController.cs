@@ -77,11 +77,6 @@ public class FPSCameraController : MonoBehaviour
         _movementSpeed = fpsCharacterController.GetMovementSpeed();
         _direction = fpsCharacterController.GetMovementDirection();
     
-        _fov = CalculateFov(_movementSpeed, fpsCharacterController.horizontalSpeed, fov, MaxFov, fovSpeedBias, _direction);
-
-        playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, _fov, fovSmoothSpeed);
-        weaponCamera.fieldOfView = Mathf.Lerp(weaponCamera.fieldOfView, _fov, fovSmoothSpeed);
-    
         _pitch = Mathf.Clamp(_pitch + (_lookDirection.y * sensitivity * Time.deltaTime * (invertYAxis ? 1 : -1)), minPitch, maxPitch);
         _yaw += _lookDirection.x * sensitivity * Time.deltaTime;
     
@@ -93,15 +88,7 @@ public class FPSCameraController : MonoBehaviour
     {
         _lookDirection = direction;
     }
-
-    private static float CalculateFov(float _movementSpeed, float horizontalSpeed, float baseFov, float maxFov, float fovSpeedBias, Vector2 _direction)
-    {
-        float speedRatio = Mathf.Max(_movementSpeed / horizontalSpeed, 1f);
-        float logValue = Mathf.Log(speedRatio);
-        float scale = (maxFov - baseFov) / Mathf.Log((maxFov / horizontalSpeed));
-        float fov = baseFov + (logValue * scale) * _direction.magnitude * fovSpeedBias;
-        return Mathf.Clamp(fov, MinFov, maxFov);
-    }
+    
     
     private void HandleTeleport(GameObject obj, Transform fromPortal, Transform toPortal)
     {
