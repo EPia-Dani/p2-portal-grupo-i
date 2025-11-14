@@ -23,6 +23,15 @@ public class AudioManager : MonoBehaviour
         _currentCoroutine = StartCoroutine(PlaySfxCoroutine(clip, volume));
     }
     
+    public void PlaySfxLoop(AudioClip clip, float volume = 1f)
+    {
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.volume = volume;
+        source.loop = true;
+        source.Play();
+    }
+    
     private IEnumerator PlaySfxCoroutine(AudioClip clip, float volume)
     {
         

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class LaserReceiver: MonoBehaviour, ITriggerable
@@ -9,6 +10,9 @@ public class LaserReceiver: MonoBehaviour, ITriggerable
     private ITriggerable _trigger;
     private bool _isTriggered = false;
     private MaterialPropertyChanger _matChanger;
+    
+    
+    public static event Action<GameObject, bool> SecondaryObjectiveTriggered;
     
     private void Start()
     {
@@ -34,6 +38,7 @@ public class LaserReceiver: MonoBehaviour, ITriggerable
         else _matChanger.ChangeEmissionWithPropertyBlock(Color.white);
         _isTriggered = activate;
         _trigger?.Trigger(activate);
+        SecondaryObjectiveTriggered?.Invoke(gameObject, activate);
     }
 
     public bool IsTriggered()

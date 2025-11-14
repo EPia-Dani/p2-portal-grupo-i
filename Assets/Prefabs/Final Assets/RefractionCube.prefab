@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5842190768616481377}
   - component: {fileID: 8055703205655448974}
   - component: {fileID: 4125954116570486923}
+  - component: {fileID: -4489216622946661882}
   m_Layer: 0
   m_Name: RefractionCube
   m_TagString: Grabbable
@@ -227,6 +228,24 @@ LineRenderer:
   m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-4489216622946661882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406693539034665762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8c3edf176627a45952f04af5033183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowResize: 0
+  canBeCloned: 0
+  IsTeleporting: 0
+  projectionClone: {fileID: 0}
+  projectionFromPortal: {fileID: 0}
+  projectionToPortal: {fileID: 0}
 --- !u!1 &1408175717434711008
 GameObject:
   m_ObjectHideFlags: 0
