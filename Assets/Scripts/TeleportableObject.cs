@@ -7,6 +7,7 @@ public class TeleportableObject : MonoBehaviour
 {
     public static event Action<GameObject, Transform, Transform> OnTeleport;
     public bool allowResize = true;
+    public bool canBeCloned = true;
 
     [HideInInspector] public bool IsTeleporting = false;
 
@@ -111,6 +112,7 @@ public class TeleportableObject : MonoBehaviour
 
     public void CreateProjectionClone(Transform fromPortal, Transform toPortal)
     {
+        if(canBeCloned == false) return;
         if (projectionClone != null) return;
 
         projectionFromPortal = fromPortal;

@@ -2725,6 +2725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowResize: 1
+  canBeCloned: 1
   IsTeleporting: 0
   projectionClone: {fileID: 0}
   projectionFromPortal: {fileID: 0}
@@ -3116,6 +3117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowResize: 1
+  canBeCloned: 1
   IsTeleporting: 0
   projectionClone: {fileID: 0}
   projectionFromPortal: {fileID: 0}
@@ -3343,6 +3345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowResize: 1
+  canBeCloned: 1
   IsTeleporting: 0
   projectionClone: {fileID: 0}
   projectionFromPortal: {fileID: 0}
@@ -4001,6 +4004,11 @@ PrefabInstance:
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4440260472295589249, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
+      propertyPath: canBeCloned
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4891316618210001272, guid: c248be4a67b17db4e9f403dfa36156ed,
