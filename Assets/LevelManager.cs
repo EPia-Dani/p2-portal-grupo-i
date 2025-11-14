@@ -13,10 +13,20 @@ public class LevelManager : MonoBehaviour
     private static Quaternion _lastCheckpointRotation;
     private static bool _hasCheckpoint = false;
 
+    private static LevelManager _instance;
+
     private void Awake()
     {
-        // Hacer este objeto persistente entre escenas
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        InitializeReferences();
     }
 
     private void OnEnable()
@@ -41,10 +51,10 @@ public class LevelManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        orangePortal = Extensions.GetChildRecursive("PortalOrange", transform.parent)?.gameObject;
-        bluePortal = Extensions.GetChildRecursive("PortalBlue", transform.parent)?.gameObject;
+        InitializeReferences();
+
         player = GameObject.FindGameObjectWithTag("Player");
-        
+
         if (_hasCheckpoint && player != null)
         {
             var rb = player.GetComponent<Rigidbody>();
@@ -71,6 +81,16 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void InitializeReferences()
+    {
+        if (orangePortal == null)
+            orangePortal = GameObject.Find("PortalOrange");
+        if (bluePortal == null)
+            bluePortal = GameObject.Find("PortalBlue");
+        if (player == null)
+            player = GameObject.FindGameObjectWithTag("Player");
+    }
+
     private void SaveCheckpoint(Vector3 position, Quaternion rotation)
     {
         _lastCheckpointPosition = position;
@@ -83,12 +103,12 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public static bool IsOrangePortalActive()
+    public bool IsOrangePortalActive()
     {
         return _orangeActive;
     }
 
-    public static bool IsBluePortalActive()
+    public bool IsBluePortalActive()
     {
         return _blueActive;
     }
@@ -108,8 +128,8 @@ public class LevelManager : MonoBehaviour
         {
             _orangeActive = false;
             _blueActive = false;
-            orangePortal.SetActive(false);
-            bluePortal.SetActive(false);
+            orangePortal?.SetActive(false);
+            bluePortal?.SetActive(false);
         }
     }
 

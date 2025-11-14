@@ -9,10 +9,19 @@ public class PlayerStatusManager : MonoBehaviour
     [SerializeField] private float healDelay = 5f;
     [SerializeField] private float healRate = 0.3f;
     [SerializeField] private float healAmount = 10f;
+    [SerializeField] private Image crosshairImage;
+    [SerializeField] private LevelManager levelManager;
     
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip healSound;
+    
+    [Header("Crosshairs")]
+    [SerializeField] private Sprite normalCrosshair;
+    [SerializeField] private Sprite orangeCrosshair;
+    [SerializeField] private Sprite blueCrosshair;
+    [SerializeField] private Sprite bothCrosshair;
+    
     
     private float _lastDamageTime;
     private float _lastHealTime;
@@ -75,6 +84,7 @@ public class PlayerStatusManager : MonoBehaviour
         }
         
         UpdateDamageImageAlpha();
+        UpdateCrosshairImage();
     }
     
     public void TakeDamage(float damage)
@@ -103,7 +113,26 @@ public class PlayerStatusManager : MonoBehaviour
 
         damageImage.color = new Color(damageColor.r, damageColor.g, damageColor.b, smoothAlpha);
     }
-    
+
+    private void UpdateCrosshairImage()
+    {
+        if(levelManager.IsBluePortalActive() && levelManager.IsOrangePortalActive())
+        {
+            crosshairImage.sprite = bothCrosshair;
+        }
+        else if(levelManager.IsBluePortalActive())
+        {
+            crosshairImage.sprite = blueCrosshair;
+        }
+        else if(levelManager.IsOrangePortalActive())
+        {
+            crosshairImage.sprite = orangeCrosshair;
+        }
+        else
+        {
+            crosshairImage.sprite = normalCrosshair;
+        }
+    }
 
     private void Die()
     {
