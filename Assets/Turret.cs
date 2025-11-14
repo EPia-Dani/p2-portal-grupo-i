@@ -65,6 +65,7 @@ public class Turret : MonoBehaviour
             var reflector = hit.collider.GetComponent<LaserReflection>();
             var receiver = hit.collider.GetComponent<LaserReceiver>();
             var player = hit.collider.GetComponent<PlayerStatusManager>();
+            var turret = hit.collider.GetComponent<Turret>();
             
             if (reflector)
             {
@@ -90,13 +91,19 @@ public class Turret : MonoBehaviour
             }
             else if (receiver)
             {
-                Debug.Log("Hit " + hit.collider.name);
 
                 if (receiver.IsTriggered()) return;
                 receiver.Trigger(true);
                 _particleSystem.SetActive(false);
                 _currentImpact = receiver.gameObject;
                 
+            }
+            else if (turret)
+            {
+                if (turret.CheckIsDead()) return;
+                turret.Kill();
+                _particleSystem.SetActive(false);
+                _currentImpact = turret.gameObject;
             }
             else
             {
@@ -156,7 +163,7 @@ public class Turret : MonoBehaviour
         }
     }
     
-    private bool CheckIsDead()
+    public bool CheckIsDead()
     {
         if (!_grabbable.IsGrabbed())
         {
@@ -186,6 +193,16 @@ public class Turret : MonoBehaviour
             _isDead = false;
             ResetLaser();
         }
+    }
+    
+    public void Kill()
+    {
+        if(!_isDead) _audioManager.PlaySfx(deathSound, 1f);
+        StopImpact();
+        StopCasting();
+        
+        _isDead = true;
+        GetComponent<Rigidbody>().AddForce(transform.up * 0.5f, ForceMode.VelocityChange);
     }
         
 }

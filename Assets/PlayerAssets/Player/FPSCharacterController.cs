@@ -157,7 +157,6 @@ public class FPSCharacterController : MonoBehaviour
             }
             else if (Physics.Raycast(ray, out hit, interactionDistance, excludedLayers))
             {
-                Debug.Log("Impacted " + hit.collider.gameObject.layer);
 
                 if(hit.collider.tag.Contains("Interactable"))
                 {

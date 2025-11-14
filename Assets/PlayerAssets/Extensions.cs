@@ -5,6 +5,8 @@ public static class Extensions
 {
     public static GameObject GetChildRecursive(String childName, Transform nodeToCheck)
     {
+        if (nodeToCheck == null) return null;
+        
         var childCount = nodeToCheck.childCount;
 
         GameObject result = null;

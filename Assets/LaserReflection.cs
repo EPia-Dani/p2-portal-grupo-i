@@ -47,8 +47,8 @@ public class LaserReflection : MonoBehaviour
             var reflector = hit.collider.GetComponent<LaserReflection>();
             var receiver = hit.collider.GetComponent<LaserReceiver>();
             var player = hit.collider.GetComponent<PlayerStatusManager>();
-
-
+            var turret = hit.collider.GetComponent<Turret>();
+            
             if (reflector)
             {
                 if (reflector.IsReflecting() && reflector.gameObject != _currentImpact)
@@ -76,6 +76,13 @@ public class LaserReflection : MonoBehaviour
                 _particleSystem.SetActive(false);
                 _currentImpact = receiver.gameObject;
                 
+            }
+            else if (turret)
+            {
+                if (turret.CheckIsDead()) return;
+                turret.Kill();
+                _particleSystem.SetActive(false);
+                _currentImpact = turret.gameObject;
             }
             else
             {
