@@ -6,7 +6,8 @@ using UnityEngine;
 public class TeleportableObject : MonoBehaviour
 {
     public static event Action<GameObject, Transform, Transform> OnTeleport;
-    
+    public bool allowResize = true;
+
     [HideInInspector] public bool IsTeleporting = false;
 
     private Collider col;
@@ -59,6 +60,20 @@ public class TeleportableObject : MonoBehaviour
         Quaternion mirror = Quaternion.Euler(0, 180, 0);
         localRot = mirror * localRot;
         Quaternion newRot = toPortal.rotation * localRot;
+
+        if (allowResize)
+        {
+            //Scale ratio between portals
+            Vector3 scaleRatio = new Vector3(
+                toPortal.lossyScale.x / fromPortal.lossyScale.x,
+                toPortal.lossyScale.y / fromPortal.lossyScale.y,
+                toPortal.lossyScale.z / fromPortal.lossyScale.z
+                );
+
+            // Apply cumulative scale to the object
+            transform.localScale = Vector3.Scale(transform.localScale, scaleRatio);
+        }
+
 
         // Desactivar temporalmente interpolación para evitar conflictos
         RigidbodyInterpolation prevInterpolation = rb.interpolation;
