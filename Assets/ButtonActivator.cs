@@ -5,6 +5,7 @@ public class ButtonActivator : MonoBehaviour
     private Collider _collider;
     
     [SerializeField] private AudioClip buttonSound;
+    [SerializeField] private AudioClip buttonReleaseSound;
     
     private AudioManager _audioManager;
     
@@ -38,7 +39,7 @@ public class ButtonActivator : MonoBehaviour
         if (button && button.IsPressed())
         {
             button.OnButtonReleased();
-            _audioManager.PlaySfx(buttonSound, 3f);
+            _audioManager.PlaySfx(buttonReleaseSound, 0.1f);
         }
         
     }

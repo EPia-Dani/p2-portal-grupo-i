@@ -25,6 +25,7 @@ public class FPSCharacterController : MonoBehaviour
     private Camera _playerCamera;
     private Rigidbody _rigidbody;
     private CapsuleCollider _capsuleCollider;
+    private AudioSource _footstepAudioSource;
     public GameObject arms;
 
     private float _movementSpeed;
@@ -42,6 +43,7 @@ public class FPSCharacterController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        _footstepAudioSource = GetComponent<AudioSource>();
     
         // Configuración del Rigidbody sin interpolación
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -59,9 +61,23 @@ public class FPSCharacterController : MonoBehaviour
     void Update()
     {
         CheckGrounded();
-
+        
         _movementSpeed = _isRunning ? runningSpeed : horizontalSpeed;
 
+        bool shouldPlayFootsteps = _isGrounded && _direction.magnitude > 0.1f;
+    
+        if (_footstepAudioSource != null)
+        {
+            if (shouldPlayFootsteps && !_footstepAudioSource.isPlaying)
+            {
+                _footstepAudioSource.Play();
+            }
+            else if (!shouldPlayFootsteps && _footstepAudioSource.isPlaying)
+            {
+                _footstepAudioSource.Stop();
+            }
+        }
+        
         WeaponLeaning();
         arms.transform.localRotation = Quaternion.Euler(_weaponXLean, 0, _weaponZLean);
     }

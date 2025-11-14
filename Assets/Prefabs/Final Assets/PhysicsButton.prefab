@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 7717547651042586830}
   - component: {fileID: 1884549518929844311}
   m_Layer: 0
-  m_Name: ActivatorColl
+  m_Name: ActivatorCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonSound: {fileID: 8300000, guid: dc19edfb88006b340b31d44d363ce264, type: 3}
+  buttonReleaseSound: {fileID: 8300000, guid: aa060352146fad14b9d4be810e2a2412, type: 3}
 --- !u!114 &1884549518929844311
 MonoBehaviour:
   m_ObjectHideFlags: 0

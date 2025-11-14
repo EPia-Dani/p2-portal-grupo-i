@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 2476033702674472546}
   - component: {fileID: 3384034908217287826}
   - component: {fileID: 174533490841861270}
+  - component: {fileID: 7544485877303859106}
   m_Layer: 0
   m_Name: Button
   m_TagString: Interactable
@@ -454,6 +455,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerObj: {fileID: 0}
+  interactSound: {fileID: 8300000, guid: 13ffbecff3752a249986b151e3611d0a, type: 3}
 --- !u!65 &3384034908217287826
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -497,6 +499,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7544485877303859106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5371811685733553771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3643927b070647f429ef0e4b39ab66d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6943698601955871549
 GameObject:
   m_ObjectHideFlags: 0
