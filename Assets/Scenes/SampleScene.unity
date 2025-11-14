@@ -119,6 +119,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!20 &101683532 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4848448151222631824, guid: cb7c5531994161142a8b4b0249d7c21e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1321470789}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &180466596
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +452,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -2556,6 +2562,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4852634168752378791, guid: cb7c5531994161142a8b4b0249d7c21e,
+        type: 3}
+      propertyPath: fov
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 6033878690478390397, guid: cb7c5531994161142a8b4b0249d7c21e,
         type: 3}
       propertyPath: m_Name
@@ -2715,6 +2726,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowResize: 1
   IsTeleporting: 0
+  projectionClone: {fileID: 0}
+  projectionFromPortal: {fileID: 0}
+  projectionToPortal: {fileID: 0}
 --- !u!4 &1451145643 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5420594482253502165, guid: edc0c0b123c2b3a42b0c446a30db5af3,
@@ -3103,6 +3117,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowResize: 1
   IsTeleporting: 0
+  projectionClone: {fileID: 0}
+  projectionFromPortal: {fileID: 0}
+  projectionToPortal: {fileID: 0}
 --- !u!1 &1796376515
 GameObject:
   m_ObjectHideFlags: 0
@@ -3327,6 +3344,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowResize: 1
   IsTeleporting: 0
+  projectionClone: {fileID: 0}
+  projectionFromPortal: {fileID: 0}
+  projectionToPortal: {fileID: 0}
 --- !u!1 &1930274565
 GameObject:
   m_ObjectHideFlags: 0
@@ -3545,10 +3565,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sourceCamera: {fileID: 1248971996}
-  _currentCamera: {fileID: 0}
+  _currentCamera: {fileID: 189928558}
   _backupCamera: {fileID: 0}
   linkedPortal: {fileID: 2012386924}
-  playerCamera: {fileID: 4215349819027016813}
+  playerCamera: {fileID: 101683532}
   textureWidth: 1920
   textureHeight: 1080
   textureName: PortalRT
@@ -3720,10 +3740,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sourceCamera: {fileID: 189928558}
-  _currentCamera: {fileID: 0}
+  _currentCamera: {fileID: 1248971996}
   _backupCamera: {fileID: 0}
   linkedPortal: {fileID: 1984472329}
-  playerCamera: {fileID: 4215349819027016813}
+  playerCamera: {fileID: 101683532}
   textureWidth: 1920
   textureHeight: 1080
   textureName: PortalRT
@@ -3925,12 +3945,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1928178513}
   m_SourcePrefab: {fileID: 100100000, guid: edc0c0b123c2b3a42b0c446a30db5af3, type: 3}
---- !u!20 &4215349819027016813 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 7500728518303694433, guid: c248be4a67b17db4e9f403dfa36156ed,
-    type: 3}
-  m_PrefabInstance: {fileID: 7775924451103461207}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7775924451103461207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3987,6 +4001,11 @@ PrefabInstance:
     - target: {fileID: 1367763236499226901, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891316618210001272, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5267391690968635807, guid: c248be4a67b17db4e9f403dfa36156ed,
