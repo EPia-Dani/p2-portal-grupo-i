@@ -31,6 +31,7 @@ public class PortalTeleporter : MonoBehaviour
 
         //While inside the trigger, disable wall collisions so we can step through
         t.SetIgnoreWalls(true);
+        t.CreateProjectionClone(portalSurface, linkedPortal);
     }
 
     private void OnTriggerExit(Collider other)
@@ -42,6 +43,7 @@ public class PortalTeleporter : MonoBehaviour
         if (tracked.ContainsKey(t))
         {
             tracked.Remove(t);
+            t.DestroyProjectionClone();
             t.FinishTeleport();
         }
     }
@@ -62,6 +64,8 @@ public class PortalTeleporter : MonoBehaviour
                 tracked.Remove(t);
                 continue;
             }
+
+            t.UpdateProjectionClone();
 
             float lastSide = pair.Value;
             float currentSide = GetSideOfPortal(t);

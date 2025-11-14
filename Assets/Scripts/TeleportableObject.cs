@@ -10,6 +10,10 @@ public class TeleportableObject : MonoBehaviour
 
     [HideInInspector] public bool IsTeleporting = false;
 
+    [HideInInspector] public GameObject projectionClone;
+    [HideInInspector] public Transform projectionFromPortal;
+    [HideInInspector] public Transform projectionToPortal;
+
     private Collider col;
     private Rigidbody rb;
     private CharacterController cc;
@@ -104,4 +108,71 @@ public class TeleportableObject : MonoBehaviour
         yield return null; //Wait ONE FRAME
         IsTeleporting = false;
     }
+
+    public void CreateProjectionClone(Transform fromPortal, Transform toPortal)
+    {
+        if (projectionClone != null) return;
+
+        projectionFromPortal = fromPortal;
+        projectionToPortal = toPortal;
+
+        //Create the clone
+        projectionClone = Instantiate(gameObject);
+        projectionClone.name = gameObject.name + "_Clone";
+
+        //Remove unnecessary components from the clone
+        var cloneRb = projectionClone.GetComponent<Rigidbody>();
+        if (cloneRb) Destroy(cloneRb);
+
+        var cloneCC = projectionClone.GetComponent<CharacterController>();
+        if (cloneCC) Destroy(cloneCC);
+
+        foreach (var cam in projectionClone.GetComponentsInChildren<Camera>())
+            Destroy(cam);
+
+        var t = projectionClone.GetComponent<TeleportableObject>();
+        if (t) Destroy(t);
+
+        //Disable components on the clone
+        foreach (var col in projectionClone.GetComponentsInChildren<Collider>())
+            col.enabled = false;
+    }
+
+    public void UpdateProjectionClone()
+    {
+        if (projectionClone == null) return;
+
+        //Calculate projected pos/rot
+        Vector3 localPos = projectionFromPortal.InverseTransformPoint(transform.position);
+        localPos = new Vector3(-localPos.x, localPos.y, -localPos.z);
+        Vector3 projPos = projectionToPortal.TransformPoint(localPos);
+
+        Quaternion relativeRot = Quaternion.Inverse(projectionFromPortal.rotation) * transform.rotation;
+        Quaternion projRot = projectionToPortal.rotation * Quaternion.Euler(0, 180, 0) * relativeRot;
+
+        projectionClone.transform.SetPositionAndRotation(projPos, projRot);
+
+        //Apply scaling
+        if (allowResize)
+        {
+            Vector3 scaleRatio = new Vector3(
+                projectionToPortal.lossyScale.x / projectionFromPortal.lossyScale.x,
+                projectionToPortal.lossyScale.y / projectionFromPortal.lossyScale.y,
+                projectionToPortal.lossyScale.z / projectionFromPortal.lossyScale.z
+            );
+
+            projectionClone.transform.localScale = Vector3.Scale(transform.localScale, scaleRatio);
+        }
+    }
+    public void DestroyProjectionClone()
+    {
+        if (projectionClone != null)
+            GameObject.Destroy(projectionClone);
+
+        //Reset references
+        projectionClone = null;
+        projectionFromPortal = null;
+        projectionToPortal = null;
+    }
+
 }
