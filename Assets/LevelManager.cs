@@ -41,12 +41,10 @@ public class LevelManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Recargar referencias que se perdieron al recargar la escena
-        orangePortal = GameObject.Find("OrangePortal"); // Ajusta el nombre según tu jerarquía
-        bluePortal = GameObject.Find("BluePortal");
+        orangePortal = Extensions.GetChildRecursive("PortalOrange", transform.parent)?.gameObject;
+        bluePortal = Extensions.GetChildRecursive("PortalBlue", transform.parent)?.gameObject;
         player = GameObject.FindGameObjectWithTag("Player");
-
-        // Teleportar jugador al último checkpoint
+        
         if (_hasCheckpoint && player != null)
         {
             var rb = player.GetComponent<Rigidbody>();
@@ -103,8 +101,8 @@ public class LevelManager : MonoBehaviour
         {
             _orangeActive = true;
             _blueActive = true;
-            orangePortal.SetActive(true);
-            bluePortal.SetActive(true);
+            orangePortal?.SetActive(true);
+            bluePortal?.SetActive(true);
         }
         else
         {

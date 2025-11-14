@@ -9,6 +9,9 @@ public class ShootPortal : MonoBehaviour
     public Transform bluePortal;
     public Material portalWallMaterial;
     public GameObject portalPreviewPrefab; //NO COLLIDER
+    
+    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioClip portalSound;
 
     [Header("Settings")]
     public float maxPointDistance = 0.01f;
@@ -174,6 +177,7 @@ public class ShootPortal : MonoBehaviour
                 {
                     state.portal.localScale = Vector3.one * state.scale;
                     PlacePortal(state.portal, pos, rot);
+                    audioManager.PlaySfx(portalSound, 1f);
                 }
             }
             //Portal has been placed or placement has been cancelled

@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerAudioManager : MonoBehaviour
+public class AudioManager : MonoBehaviour
 {
     
-    public static PlayerAudioManager instance;
+    public static AudioManager instance;
     
     private Coroutine _currentCoroutine;
     
@@ -16,14 +16,14 @@ public class PlayerAudioManager : MonoBehaviour
 
     
 
-    public void PlaySFX(AudioClip clip, float volume = 1f)
+    public void PlaySfx(AudioClip clip, float volume = 1f)
     {
         
         if(_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-        _currentCoroutine = StartCoroutine(PlaySFXCoroutine(clip, volume));
+        _currentCoroutine = StartCoroutine(PlaySfxCoroutine(clip, volume));
     }
     
-    private IEnumerator PlaySFXCoroutine(AudioClip clip, float volume)
+    private IEnumerator PlaySfxCoroutine(AudioClip clip, float volume)
     {
         
         AudioSource source = gameObject.AddComponent<AudioSource>();

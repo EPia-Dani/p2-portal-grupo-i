@@ -53,7 +53,7 @@ public class PlayerDeath : MonoBehaviour
         if (_playerCamera == null)
             yield break;
     
-        PlayerAudioManager.instance.PlaySFX(playerDeathAudioClip, 1f);
+        AudioManager.instance.PlaySfx(playerDeathAudioClip, 1f);
         Transform camT = _playerCamera.transform;
         Quaternion startRot = camT.localRotation;
         Quaternion targetRot = startRot * Quaternion.Euler(0f, 0f, rollAngle);

@@ -78,7 +78,7 @@ public class WeaponController : MonoBehaviour
             _animator.SetTrigger("Shoot");
             _lastTimeShot = Time.time;
             _currentAmmo--;
-            PlayerAudioManager.instance.PlaySFX(gunShotAudioClip, 0.7f);
+            AudioManager.instance.PlaySfx(gunShotAudioClip, 0.7f);
             WeaponShot?.Invoke(_currentAmmo, _maxAmmo);
 
             var hit = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
@@ -112,7 +112,7 @@ public class WeaponController : MonoBehaviour
             if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Reload"))
             {
                 _animator.SetTrigger("Reload");
-                PlayerAudioManager.instance.PlaySFX(reloadAudioClip, 0.7f);
+                AudioManager.instance.PlaySfx(reloadAudioClip, 0.7f);
             }
             
         }

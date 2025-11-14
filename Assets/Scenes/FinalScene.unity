@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 18967788}
   - component: {fileID: 18967787}
   m_Layer: 0
-  m_Name: GameObject (2)
+  m_Name: Disabler 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,8 +346,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.0182724, y: 2.3794394, z: 0.33016205}
-  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.26224136}
+  m_Size: {x: 3.0182724, y: 2.3794394, z: 0}
+  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.097160354}
 --- !u!4 &18967789
 Transform:
   m_ObjectHideFlags: 0
@@ -4379,7 +4379,7 @@ GameObject:
   - component: {fileID: 438565695}
   - component: {fileID: 438565694}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: Disabler 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4416,8 +4416,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.0182724, y: 2.3794394, z: 0.33016205}
-  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.26224136}
+  m_Size: {x: 3.0182724, y: 2.3794394, z: 0}
+  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.22047627}
 --- !u!4 &438565696
 Transform:
   m_ObjectHideFlags: 0
@@ -12953,6 +12953,16 @@ PrefabInstance:
       objectReference: {fileID: 822290621}
     - target: {fileID: 5267391690968635807, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
+      propertyPath: portalSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e8c50ab6c39a5644194e39cfc92527cd, type: 3}
+    - target: {fileID: 5267391690968635807, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 1232691352}
+    - target: {fileID: 5267391690968635807, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
       propertyPath: orangePortal
       value: 
       objectReference: {fileID: 267165369}
@@ -13129,8 +13139,12 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8764880293151942890, guid: c248be4a67b17db4e9f403dfa36156ed,
         type: 3}
-      insertIndex: 13
+      insertIndex: 10
       addedObject: {fileID: 1232691326}
+    - targetCorrespondingSourceObject: {fileID: 8764880293151942890, guid: c248be4a67b17db4e9f403dfa36156ed,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1232691352}
   m_SourcePrefab: {fileID: 100100000, guid: c248be4a67b17db4e9f403dfa36156ed, type: 3}
 --- !u!1 &1055008791
 GameObject:
@@ -15958,6 +15972,9 @@ MonoBehaviour:
   healDelay: 5
   healRate: 0.3
   healAmount: 10
+  hurtSound: {fileID: 8300000, guid: a844d1ed3b66a544795f4c65490a3ae3, type: 3}
+  deathSound: {fileID: 8300000, guid: 0cc46bbd739631d4c8ab5e4cee259e6d, type: 3}
+  healSound: {fileID: 8300000, guid: 77c5c2c825f4def4fa800685036caa96, type: 3}
 --- !u!114 &1232691335 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4417647513405836275, guid: c248be4a67b17db4e9f403dfa36156ed,
@@ -15968,6 +15985,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 584b83048a790a6428109fef589b7da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1232691352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232691312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3643927b070647f429ef0e4b39ab66d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!43 &1234854722
@@ -18970,7 +18999,7 @@ GameObject:
   - component: {fileID: 1373061567}
   - component: {fileID: 1373061566}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Disabler 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19007,8 +19036,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.0182724, y: 2.3794394, z: 0.33016205}
-  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.26224136}
+  m_Size: {x: 3.0182724, y: 2.3794394, z: 0.011482239}
+  m_Center: {x: 0.091747284, y: 0.6897197, z: 0.42158127}
 --- !u!4 &1373061568
 Transform:
   m_ObjectHideFlags: 0

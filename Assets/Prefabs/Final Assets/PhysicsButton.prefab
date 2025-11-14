@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 607026399109892353}
   - component: {fileID: 6886781111128547104}
   m_Layer: 0
-  m_Name: Stm_button01 (1)
+  m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 3211717340123950704}
   - component: {fileID: 7227548399242427546}
   - component: {fileID: 7717547651042586830}
+  - component: {fileID: 1884549518929844311}
   m_Layer: 0
   m_Name: ActivatorColl
   m_TagString: Untagged
@@ -442,6 +443,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0180c7f3aa5951741ae57c69aac0c8e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSound: {fileID: 8300000, guid: dc19edfb88006b340b31d44d363ce264, type: 3}
+--- !u!114 &1884549518929844311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5491052414471095703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3643927b070647f429ef0e4b39ab66d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5949033612028383119
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +469,7 @@ GameObject:
   - component: {fileID: 7228249919059481179}
   - component: {fileID: 5488963665228268332}
   m_Layer: 0
-  m_Name: Stm_button01
+  m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,7 +578,7 @@ GameObject:
   - component: {fileID: 1728413649851480419}
   - component: {fileID: 5094342272275930890}
   m_Layer: 0
-  m_Name: Stm_button02
+  m_Name: model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
